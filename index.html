@@ -1,36 +1,46 @@
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cozinha Pet | Nutrição Natural Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Cozinha Pet | Nutrição Natural Premium para Pets</title>
+    <meta name="description" content="Nutrição clínica natural para cães e gatos com rigor farmacêutico e ingredientes grau humano.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         brand: {
-                            blue: '#004ea1', // Logo Royal Blue
+                            blue: '#004ea1',
                             blueLight: '#e6f0fa',
                             blueDark: '#003a78',
-                            red: '#da1f26',  // Logo Vibrant Red
+                            red: '#da1f26',
                             redLight: '#feecee',
                             redDark: '#b0191f',
                         },
                         neutral: {
-                            50: '#fdfbf7', // Beige/Cream base from logo
+                            50: '#fdfbf7',
                             100: '#f7f2ea',
-                            900: '#001a35', // Very dark blue for text instead of black
+                            900: '#001a35',
                         }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'bounce-subtle': 'bounce-subtle 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        'bounce-subtle': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
                     }
                 }
             }
@@ -41,6 +51,8 @@
             font-family: 'Inter', sans-serif;
             background-color: #fdfbf7;
             color: #001a35;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         .font-serif {
             font-family: 'Playfair Display', serif;
@@ -51,6 +63,24 @@
         ::selection {
             background-color: #004ea1;
             color: white;
+        }
+        /* Custom scrollbar for premium look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdfbf7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #004ea120;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #004ea140;
+        }
+        /* Fluid Typography improvements */
+        @media (max-width: 640px) {
+            h1 { font-size: 2.25rem !important; }
         }
     </style>
 <script type="importmap">
@@ -63,9 +93,7 @@
   }
 }
 </script>
-
 <script type="module" src="/index.tsx"></script>
-
 </head>
 <body class="overflow-x-hidden">
     <div id="root"></div>

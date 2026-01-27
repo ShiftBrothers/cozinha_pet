@@ -8,26 +8,34 @@ import { Footer } from './components/Footer';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col font-sans selection:bg-brand-blue selection:text-white">
       <Navbar />
       <main className="flex-grow">
         <Hero />
         <SocialProof />
         <BentoGrid />
-        <section className="py-24 bg-brand-blue text-neutral-50 px-6 relative overflow-hidden">
-          {/* Decorative Red Accent */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-red/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        
+        {/* Call to Action Section - Highly responsive and visually impactful */}
+        <section className="py-20 md:py-32 bg-brand-blue text-neutral-50 px-4 sm:px-6 relative overflow-hidden">
+          {/* Decorative Red Accents for Wide Screens */}
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-brand-red/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-brand-red/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
           
-          <div className="max-w-7xl mx-auto text-center relative z-10">
-            <h2 className="text-3xl md:text-5xl font-serif mb-6">
-              Pronto para transformar a vida do seu melhor amigo?
+          <div className="max-w-[1440px] mx-auto text-center relative z-10 px-4">
+            <h2 className="text-4xl sm:text-5xl lg:text-7xl font-serif mb-8 leading-tight tracking-tight">
+              Pronto para transformar a <br className="hidden sm:block" /> vida do seu melhor amigo?
             </h2>
-            <p className="text-brand-blueLight text-lg md:text-xl max-w-2xl mx-auto mb-10 opacity-90">
-              Dietas personalizadas formuladas por especialistas com ingredientes de verdade e o rigor que seu pet merece.
+            <p className="text-brand-blueLight text-lg md:text-2xl max-w-3xl mx-auto mb-12 opacity-90 leading-relaxed font-light">
+              Junte-se a milhares de tutores que já escolheram o rigor técnico e o carinho da Cozinha Pet. Dietas personalizadas para cada fase da vida.
             </p>
-            <button className="bg-brand-red text-white px-10 py-4 rounded-full font-bold hover:bg-brand-redDark transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1 active:translate-y-0">
-              Falar com Especialista
-            </button>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <button className="bg-brand-red text-white px-12 py-5 rounded-full font-black text-lg hover:bg-brand-redDark transition-all shadow-2xl hover:shadow-brand-red/40 transform hover:-translate-y-1 active:scale-95 w-full sm:w-auto">
+                Montar Meu Plano
+              </button>
+              <button className="bg-transparent border-2 border-brand-blueLight/30 text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-white/10 transition-all w-full sm:w-auto">
+                Ver Cardápio
+              </button>
+            </div>
           </div>
         </section>
       </main>
