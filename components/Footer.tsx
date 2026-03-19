@@ -9,11 +9,8 @@ export const Footer: React.FC = () => {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-20 text-center sm:text-left">
           <div className="flex flex-col items-center sm:items-start">
-            <div className="flex items-center gap-3 mb-8">
-              <Logo className="w-12 h-12" />
-              <span className="font-serif text-2xl font-bold tracking-tight text-brand-blueDark">
-                Cozinha<span className="text-brand-red italic">Pet</span>
-              </span>
+            <div className="flex items-center mb-8">
+              <Logo className="h-10" />
             </div>
             <p className="text-brand-blueDark/70 text-sm md:text-base leading-relaxed mb-8 max-w-xs">
               Pioneiros em nutrição clínica natural no Brasil. Transformando vidas através de dietas personalizadas de alto rigor técnico.

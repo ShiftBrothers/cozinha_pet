@@ -22,16 +22,8 @@ export const Navbar: React.FC = () => {
         : 'bg-transparent py-4 md:py-6'
     }`}>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        <div className="flex items-center gap-2 sm:gap-3 group cursor-pointer">
-          <Logo className="w-10 h-10 md:w-12 md:h-12 transform group-hover:scale-105 transition-transform" />
-          <div className="flex flex-col">
-            <span className="font-serif text-lg sm:text-2xl font-bold tracking-tight text-brand-blueDark leading-none">
-              Cozinha<span className="text-brand-red italic">Pet</span>
-            </span>
-            <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-brand-blue/60 leading-tight">
-              Nutrição Natural
-            </span>
-          </div>
+        <div className="flex items-center group cursor-pointer">
+          <Logo className="h-8 md:h-10 transform group-hover:scale-105 transition-transform" />
         </div>
 
         {/* Desktop Links - Optimized for HD displays */}
@@ -78,7 +70,7 @@ export const Navbar: React.FC = () => {
         mobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
       } md:hidden`}>
         <div className="flex justify-between items-center mb-12">
-          <Logo className="w-12 h-12" />
+          <Logo className="h-10" />
           <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-brand-blueLight rounded-full">
             <X size={24} className="text-brand-blueDark" />
           </button>
