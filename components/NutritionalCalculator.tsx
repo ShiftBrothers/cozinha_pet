@@ -32,11 +32,16 @@ function calculateNutrition(p: PetProfile) {
   let ageMul = p.age.includes('Filhote') ? 2.5 : p.age.includes('Senior') ? 0.85 : 1;
   let neutMul = p.isNeutered ? 0.9 : 1;
   const dailyCal = Math.round(rer * actMul * ageMul * neutMul);
-  const dailyG = Math.round(dailyCal / 1.2);
+  const dailyG = Math.round(dailyCal / 1.8);
   const monthKg = Math.round((dailyG * 30) / 1000 * 10) / 10;
-  const priceCoz = Math.round(monthKg * 42);
-  const priceRac = Math.round(p.weight * 8.5);
-  const vetSave = Math.round(180 + (p.weight * 3));
+  // Degressive pricing per kg
+  let priceCoz: number;
+  if (monthKg <= 5) priceCoz = Math.round(monthKg * 36);
+  else if (monthKg <= 12) priceCoz = Math.round(5 * 36 + (monthKg - 5) * 26);
+  else priceCoz = Math.round(5 * 36 + 7 * 26 + (monthKg - 12) * 20);
+  priceCoz = Math.max(priceCoz, 189);
+  const priceRac = Math.round(p.weight * 15 + 120);
+  const vetSave = Math.round(220 + (p.weight * 6));
   const prios: string[] = [];
   if (p.age.includes('Filhote')) { prios.push('DHA para desenvolvimento cerebral', 'Cálcio/Fósforo para ossos', 'Proteína elevada'); }
   else if (p.age.includes('Senior')) { prios.push('Glucosamina para articulações', 'Antioxidantes para imunidade', 'Fibras digestivas'); }
