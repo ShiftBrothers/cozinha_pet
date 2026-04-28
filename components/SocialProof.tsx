@@ -1,36 +1,118 @@
 
-import React from 'react';
-import { ShieldCheck, Truck, Heart, Beaker } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { TrendingUp, Heart, ShieldCheck, Truck } from 'lucide-react';
+
+const AnimatedCounter: React.FC<{ target: number; suffix?: string; prefix?: string; duration?: number }> = ({ 
+  target, suffix = '', prefix = '', duration = 2000 
+}) => {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
+    let start = 0;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [isVisible, target, duration]);
+
+  return (
+    <div ref={ref} className="text-3xl md:text-4xl font-serif text-neutral-900">
+      {prefix}{count.toLocaleString('pt-BR')}{suffix}
+    </div>
+  );
+};
 
 export const SocialProof: React.FC = () => {
   const stats = [
-    { label: 'Ingredientes Grau Humano', value: '100%', icon: ShieldCheck },
-    { label: 'Dietas Formuladas', value: '+5.000', icon: Beaker },
-    { label: 'Tutores Satisfeitos', value: '98%', icon: Heart },
-    { label: 'Entregas Mensais', value: '12k', icon: Truck },
+    { 
+      label: 'Melhora na pelagem em 30 dias', 
+      value: 97, 
+      suffix: '%',
+      icon: TrendingUp,
+      color: 'text-brand-sage'
+    },
+    { 
+      label: 'De expectativa de vida a mais', 
+      value: 2.7, 
+      suffix: ' anos',
+      prefix: '+',
+      icon: Heart,
+      color: 'text-brand-red'
+    },
+    { 
+      label: 'Conservantes artificiais', 
+      value: 0, 
+      suffix: '',
+      icon: ShieldCheck,
+      color: 'text-brand-blue'
+    },
+    { 
+      label: 'Refeições entregues por mês', 
+      value: 12, 
+      suffix: 'k',
+      prefix: '+',
+      icon: Truck,
+      color: 'text-brand-earth'
+    },
   ];
 
   return (
-    <section className="bg-white py-16 border-y border-brand-blueLight">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col items-center mb-12">
-          <p className="text-brand-blue/40 font-bold text-xs uppercase tracking-widest mb-6">Parceiros em Excelência</p>
-          <div className="flex flex-wrap justify-center items-center gap-12 opacity-30 grayscale contrast-125">
-             <div className="text-3xl font-serif font-black text-brand-blueDark">VETCARE</div>
-             <div className="text-2xl font-sans font-bold text-brand-blueDark">PetZine</div>
-             <div className="text-2xl font-serif italic text-brand-blueDark tracking-tighter">NUTRIDOG</div>
-             <div className="text-3xl font-sans font-extrabold text-brand-blueDark">ANIMALIA</div>
+    <section className="bg-white py-14 md:py-16 border-y border-neutral-200/60">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Partner Logos */}
+        <div className="flex flex-col items-center mb-10 md:mb-12">
+          <p className="text-neutral-400 font-semibold text-[10px] uppercase tracking-[0.25em] mb-6">Reconhecidos por</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14 opacity-25 grayscale contrast-150">
+             <div className="text-2xl md:text-3xl font-serif text-neutral-900 tracking-tight">VETCARE</div>
+             <div className="text-xl md:text-2xl font-sans font-bold text-neutral-900">PetZine</div>
+             <div className="text-xl md:text-2xl font-serif italic text-neutral-900 tracking-tight">NUTRIDOG</div>
+             <div className="text-2xl md:text-3xl font-sans font-extrabold text-neutral-900 tracking-tighter">ANIMALIA</div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {stats.map((stat, index) => (
-            <div key={index} className="flex flex-col items-center text-center p-6 border-r last:border-r-0 border-brand-blueLight md:border-r">
-               <div className="w-12 h-12 bg-brand-blueLight rounded-xl flex items-center justify-center text-brand-blue mb-4">
-                 <stat.icon size={24} />
+            <div key={index} className="flex flex-col items-center text-center p-4 md:p-6 rounded-2xl hover:bg-brand-cream/50 transition-colors">
+               <div className={`w-10 h-10 md:w-12 md:h-12 bg-neutral-100 rounded-xl flex items-center justify-center ${stat.color} mb-3 md:mb-4`}>
+                 <stat.icon size={20} className="md:w-6 md:h-6" />
                </div>
-               <div className="text-3xl font-serif font-bold text-brand-blueDark mb-1">{stat.value}</div>
-               <div className="text-sm text-brand-blue/60 font-medium">{stat.label}</div>
+               {stat.value === 2.7 ? (
+                 <div className="text-3xl md:text-4xl font-serif text-neutral-900">
+                   +2.7 anos
+                 </div>
+               ) : (
+                 <AnimatedCounter 
+                   target={stat.value} 
+                   suffix={stat.suffix} 
+                   prefix={stat.prefix || ''} 
+                 />
+               )}
+               <div className="text-xs md:text-sm text-neutral-500 font-medium mt-1">{stat.label}</div>
             </div>
           ))}
         </div>

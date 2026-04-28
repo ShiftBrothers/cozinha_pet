@@ -1,15 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Cozinha Pet | Nutrição Natural Premium para Pets</title>
-    <meta name="description" content="Nutrição clínica natural para cães e gatos com rigor farmacêutico e ingredientes grau humano.">
+    <title>Cozinha Pet | Nutrição que Estende a Vida do Seu Pet</title>
+    <meta name="description" content="Alimentação natural premium que pode estender a vida do seu pet em até 2.7 anos. Planos personalizados por nutrólogos veterinários com ingredientes 100% grau humano.">
+    <meta name="keywords" content="alimentação natural pet, comida natural cachorro, nutrição pet premium, ração natural, cozinha pet">
+    <meta property="og:title" content="Cozinha Pet | Nutrição de Longevidade para Pets">
+    <meta property="og:description" content="Cada refeição é uma decisão sobre quanto tempo ele ficará ao seu lado. Descubra o Plano de Vitalidade do seu pet.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/png" href="/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -22,25 +26,69 @@
                             red: '#da1f26',
                             redLight: '#feecee',
                             redDark: '#b0191f',
+                            sage: '#7C9A8E',
+                            sageLight: '#E8F0EC',
+                            sageDark: '#5B7A6E',
+                            earth: '#8B7355',
+                            earthLight: '#F5F0EB',
+                            cream: '#FAF7F2',
                         },
                         neutral: {
                             50: '#fdfbf7',
                             100: '#f7f2ea',
+                            200: '#ede5d8',
+                            800: '#1a2332',
                             900: '#001a35',
                         }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
+                        serif: ['Instrument Serif', 'serif'],
                     },
                     animation: {
                         'bounce-subtle': 'bounce-subtle 3s ease-in-out infinite',
+                        'fade-in-up': 'fade-in-up 0.7s ease-out forwards',
+                        'fade-in': 'fade-in 0.5s ease-out forwards',
+                        'slide-in-left': 'slide-in-left 0.6s ease-out forwards',
+                        'slide-in-right': 'slide-in-right 0.6s ease-out forwards',
+                        'scale-in': 'scale-in 0.5s ease-out forwards',
+                        'counter': 'counter 2s ease-out forwards',
+                        'pulse-soft': 'pulse-soft 2s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
                     },
                     keyframes: {
                         'bounce-subtle': {
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-10px)' },
-                        }
+                        },
+                        'fade-in-up': {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'fade-in': {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        'slide-in-left': {
+                            '0%': { opacity: '0', transform: 'translateX(-40px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        },
+                        'slide-in-right': {
+                            '0%': { opacity: '0', transform: 'translateX(40px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        },
+                        'scale-in': {
+                            '0%': { opacity: '0', transform: 'scale(0.9)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
+                        'pulse-soft': {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.7' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
                     }
                 }
             }
@@ -49,13 +97,13 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #fdfbf7;
+            background-color: #FAF7F2;
             color: #001a35;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
         .font-serif {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Instrument Serif', serif;
         }
         .bento-inner-shadow {
             box-shadow: inset 0 0 0 1px rgba(0,78,161,0.05);
@@ -64,12 +112,12 @@
             background-color: #004ea1;
             color: white;
         }
-        /* Custom scrollbar for premium look */
+        /* Premium scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #fdfbf7;
+            background: #FAF7F2;
         }
         ::-webkit-scrollbar-thumb {
             background: #004ea120;
@@ -78,9 +126,64 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #004ea140;
         }
-        /* Fluid Typography improvements */
+        /* Fluid Typography */
         @media (max-width: 640px) {
             h1 { font-size: 2.25rem !important; }
+        }
+        /* Intersection Observer reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #004ea1, #da1f26);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* Progress bar animation */
+        .progress-bar {
+            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        /* Range slider custom */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: #e6f0fa;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #004ea1;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,78,161,0.3);
+            transition: transform 0.2s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+        /* Smooth anchor scroll */
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 <script type="importmap">
