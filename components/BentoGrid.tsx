@@ -32,21 +32,21 @@ export const BentoGrid: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-6 md:auto-rows-[220px] lg:auto-rows-[240px]">
           {/* Main Feature */}
           <div className="sm:col-span-2 lg:col-span-8 lg:row-span-2 bg-neutral-900 rounded-[2rem] md:rounded-[2.5rem] p-8 lg:p-12 flex flex-col justify-between text-neutral-50 overflow-hidden relative group">
-             <div className="z-10">
-               <div className="w-12 h-12 md:w-14 md:h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6 lg:mb-10">
-                 <Microscope size={28} className="text-brand-sageLight" />
-               </div>
-               <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif mb-4 lg:mb-6">Proteína de Alta<br/>Biodisponibilidade</h3>
-               <p className="text-neutral-400 max-w-md text-sm md:text-base leading-relaxed">
-                 Articulações 3x mais fortes com colágeno tipo II. Cada receita segue protocolos NRC/FEDIAF, garantindo absorção máxima de aminoácidos essenciais para a saúde estrutural do seu pet.
-               </p>
-             </div>
-             <div className="mt-10 flex flex-wrap gap-2 lg:gap-3 z-10">
-               <span className="bg-white/5 border border-white/10 px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-xs font-medium">Colágeno Tipo II</span>
-               <span className="bg-white/5 border border-white/10 px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-xs font-medium">Zero Conservantes</span>
-               <span className="bg-white/5 border border-white/10 px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-xs font-medium">95% Digestibilidade</span>
-             </div>
-             <div className="absolute -bottom-20 -right-20 w-80 h-80 md:w-[400px] md:h-[400px] bg-brand-sage/15 rounded-full blur-[100px] group-hover:bg-brand-sage/25 transition-all duration-700"></div>
+            <div className="z-10">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6 lg:mb-10">
+                <Microscope size={28} className="text-brand-sageLight" />
+              </div>
+              <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif mb-4 lg:mb-6">Proteína de Alta<br/>Biodisponibilidade</h3>
+              <p className="text-neutral-400 max-w-md text-sm md:text-base leading-relaxed">
+                Articulações 3x mais fortes com colágeno tipo II. Cada receita segue protocolos NRC/FEDIAF, garantindo absorção máxima de aminoácidos essenciais para a saúde estrutural do seu pet.
+              </p>
+            </div>
+            <div className="mt-10 flex flex-wrap gap-2 lg:gap-3 z-10">
+              <span className="bg-white/5 border border-white/10 px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-xs font-medium">Colágeno Tipo II</span>
+              <span className="bg-white/5 border border-white/10 px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-xs font-medium">Zero Conservantes</span>
+              <span className="bg-white/5 border border-white/10 px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-xs font-medium">95% Digestibilidade</span>
+            </div>
+            <div className="absolute -bottom-20 -right-20 w-80 h-80 md:w-[400px] md:h-[400px] bg-brand-sage/15 rounded-full blur-[100px] group-hover:bg-brand-sage/25 transition-all duration-700"></div>
           </div>
 
           {/* Zero Risco */}

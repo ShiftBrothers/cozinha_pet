@@ -9,12 +9,26 @@ export const Hero: React.FC = () => {
         {/* Visual - Top on Mobile */}
         <div className="relative order-1 md:order-2 px-4 md:px-0">
           <div className="relative z-10 rounded-[2rem] md:rounded-[3rem] overflow-hidden aspect-[4/5] sm:aspect-[16/10] md:aspect-[4/5] shadow-2xl transform md:rotate-2 transition-transform hover:rotate-0 duration-700 border-[6px] md:border-8 border-white">
-             <img 
-               src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&q=80&w=1200" 
-               alt="Golden Retriever saudável correndo ao ar livre com energia e vitalidade" 
-               className="w-full h-full object-cover"
-             />
-             <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/30 to-transparent"></div>
+            {/* video cover: autoplay + loop + muted (obrigatório para autoplay no browser) */}
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            >
+              <source
+                src="/video_bob.mp4"
+                type="video/mp4"
+              />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/30 to-transparent pointer-events-none" />
           </div>
           
           {/* Decorative elements */}
