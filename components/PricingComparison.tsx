@@ -4,7 +4,7 @@ import { Check, X, ArrowRight, Star, AlertTriangle } from 'lucide-react';
 
 const comparisonData = [
   { criteria: 'Ingredientes', industrial: 'Subprodutos, farinhas, corantes', cozinha: '100% grau humano, rastreáveis', highlight: true },
-  { criteria: 'Conservantes', industrial: 'BHA/BHT (potencial carcinogênico)', cozinha: 'Zero conservantes artificiais', highlight: true },
+  { criteria: 'Conservantes', industrial: 'BHA/BHT (potencial carcinogênico)', cozinha: '100% Livre de Conservantes artificiais', highlight: true },
   { criteria: 'Digestibilidade', industrial: '~65%', cozinha: '~95%', highlight: false },
   { criteria: 'Proteína', industrial: 'Baixa biodisponibilidade', cozinha: 'Alta biodisponibilidade + colágeno', highlight: false },
   { criteria: 'Gasto vet médio/ano', industrial: 'R$ 2.800+ (doenças crônicas)', cozinha: 'R$ 800 (apenas preventivo)', highlight: true },

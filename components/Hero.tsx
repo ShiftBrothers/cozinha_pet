@@ -8,9 +8,36 @@ export const Hero: React.FC = () => {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    // Força play no iOS Safari que ignora o atributo HTML autoplay
+
+    // Bug do React: `muted` JSX não vira atributo HTML que o iOS Safari lê.
+    // Solução: definir via DOM diretamente.
     video.muted = true;
-    video.play().catch(() => { /* autoplay bloqueado pelo browser */ });
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+
+    const tryPlay = () => {
+      video.play().catch(() => { /* bloqueado — sem nada a fazer */ });
+    };
+
+    // 1. Tenta imediatamente
+    tryPlay();
+
+    // 2. Tenta quando o vídeo tiver dados suficientes para reproduzir
+    video.addEventListener('canplay', tryPlay);
+    video.addEventListener('loadeddata', tryPlay);
+
+    // 3. Tenta quando o vídeo entrar na área visível (útil após scroll em mobile)
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) tryPlay(); },
+      { threshold: 0.1 }
+    );
+    observer.observe(video);
+
+    return () => {
+      video.removeEventListener('canplay', tryPlay);
+      video.removeEventListener('loadeddata', tryPlay);
+      observer.disconnect();
+    };
   }, []);
 
   return (
