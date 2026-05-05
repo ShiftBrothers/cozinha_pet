@@ -1,43 +1,59 @@
 
-import React, { useRef, useEffect } from 'react';
-import { ArrowRight, Shield, Clock } from 'lucide-react';
+import React, { useCallback, useRef, useState } from 'react';
+import { ArrowRight, Shield, Clock, Volume2, VolumeX } from 'lucide-react';
 
 export const Hero: React.FC = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoElRef = useRef<HTMLVideoElement | null>(null);
 
-  useEffect(() => {
-    const video = videoRef.current;
+  const toggleMute = () => {
+    const video = videoElRef.current;
     if (!video) return;
+    video.muted = !video.muted;
+    setIsMuted(video.muted);
+  };
 
-    // Bug do React: `muted` JSX não vira atributo HTML que o iOS Safari lê.
-    // Solução: definir via DOM diretamente.
+  // Callback ref: configura atributos DOM diretamente no elemento,
+  // contornando o bug do React que não renderiza `muted` como atributo HTML.
+  const videoCallbackRef = useCallback((video: HTMLVideoElement | null) => {
+    if (!video) return;
+    videoElRef.current = video;
+
+    // Definir atributos diretamente no DOM (React não faz isso corretamente com muted)
     video.muted = true;
+    video.defaultMuted = true;
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('preload', 'auto');
+    video.loop = true;
 
     const tryPlay = () => {
-      video.play().catch(() => { /* bloqueado — sem nada a fazer */ });
+      if (video.paused) {
+        video.play().catch(() => { /* bloqueado */ });
+      }
     };
 
-    // 1. Tenta imediatamente
+    // Tenta play em vários momentos para cobrir todos os cenários iOS
     tryPlay();
+    video.addEventListener('loadedmetadata', tryPlay, { once: true });
+    video.addEventListener('canplay', tryPlay, { once: true });
+    video.addEventListener('loadeddata', tryPlay, { once: true });
 
-    // 2. Tenta quando o vídeo tiver dados suficientes para reproduzir
-    video.addEventListener('canplay', tryPlay);
-    video.addEventListener('loadeddata', tryPlay);
-
-    // 3. Tenta quando o vídeo entrar na área visível (útil após scroll em mobile)
+    // Quando vídeo entra na área visível (scroll)
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) tryPlay(); },
       { threshold: 0.1 }
     );
     observer.observe(video);
 
-    return () => {
-      video.removeEventListener('canplay', tryPlay);
-      video.removeEventListener('loadeddata', tryPlay);
-      observer.disconnect();
-    };
+    // Fallback: tenta a cada 500ms por 5 segundos
+    let attempts = 0;
+    const interval = setInterval(() => {
+      tryPlay();
+      attempts++;
+      if (attempts >= 10 || !video.paused) clearInterval(interval);
+    }, 500);
   }, []);
 
   return (
@@ -45,14 +61,17 @@ export const Hero: React.FC = () => {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
         {/* Visual - Top on Mobile */}
         <div className="relative order-1 md:order-2 px-4 md:px-0">
-          <div className="relative z-10 rounded-[2rem] md:rounded-[3rem] overflow-hidden aspect-[4/5] sm:aspect-[16/10] md:aspect-[4/5] shadow-2xl transform md:rotate-2 transition-transform hover:rotate-0 duration-700 border-[6px] md:border-8 border-white">
-            {/* video cover: autoplay + loop + muted (obrigatório para autoplay no browser) */}
+          <div className="relative z-10 rounded-[2rem] md:rounded-[3rem] shadow-2xl transform md:rotate-2 transition-transform hover:rotate-0 duration-700 border-[6px] md:border-8 border-white">
+            <div className="relative overflow-hidden rounded-[calc(2rem-6px)] md:rounded-[calc(3rem-8px)] aspect-[4/5] sm:aspect-[16/10] md:aspect-[4/5]" style={{ transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}>
+            {/* Video: src direto (não <source> — iOS Safari tem bugs com child source + autoplay) */}
             <video
-              ref={videoRef}
+              ref={videoCallbackRef}
+              src="/video1.mp4"
               autoPlay
               muted
               loop
               playsInline
+              preload="auto"
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -60,13 +79,17 @@ export const Hero: React.FC = () => {
                 height: '100%',
                 objectFit: 'cover',
               }}
-            >
-              <source
-                src="/video_bob.mp4"
-                type="video/mp4"
-              />
-            </video>
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/30 to-transparent pointer-events-none" />
+            {/* Botão mute/unmute */}
+            <button
+              onClick={toggleMute}
+              className="absolute top-4 right-4 z-20 w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-all active:scale-90 border border-white/15"
+              aria-label={isMuted ? 'Ativar som' : 'Desativar som'}
+            >
+              {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            </button>
+            </div>
           </div>
           
           {/* Decorative elements */}

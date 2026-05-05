@@ -64,9 +64,9 @@ export const SocialProof: React.FC = () => {
       color: 'text-brand-red'
     },
     { 
-      label: 'Conservantes artificiais', 
-      value: 0, 
-      suffix: '',
+      label: 'Sem Conservantes', 
+      value: 100, 
+      suffix: '%',
       icon: ShieldCheck,
       color: 'text-brand-blue'
     },
