@@ -1,8 +1,18 @@
 
-import React from 'react';
-import { ArrowRight, Star, Shield, Clock } from 'lucide-react';
+import React, { useRef, useEffect } from 'react';
+import { ArrowRight, Shield, Clock } from 'lucide-react';
 
 export const Hero: React.FC = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    // Força play no iOS Safari que ignora o atributo HTML autoplay
+    video.muted = true;
+    video.play().catch(() => { /* autoplay bloqueado pelo browser */ });
+  }, []);
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center pt-24 md:pt-0 overflow-hidden bg-brand-cream lg:py-12">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
@@ -11,6 +21,7 @@ export const Hero: React.FC = () => {
           <div className="relative z-10 rounded-[2rem] md:rounded-[3rem] overflow-hidden aspect-[4/5] sm:aspect-[16/10] md:aspect-[4/5] shadow-2xl transform md:rotate-2 transition-transform hover:rotate-0 duration-700 border-[6px] md:border-8 border-white">
             {/* video cover: autoplay + loop + muted (obrigatório para autoplay no browser) */}
             <video
+              ref={videoRef}
               autoPlay
               muted
               loop
