@@ -61,9 +61,7 @@ export const Hero: React.FC = () => {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
         {/* Visual - Top on Mobile */}
         <div className="relative order-1 md:order-2 px-4 md:px-0">
-          <div className="relative z-10 rounded-[2rem] md:rounded-[3rem] shadow-2xl transform md:rotate-2 transition-transform hover:rotate-0 duration-700 border-[6px] md:border-8 border-white">
-            <div className="relative overflow-hidden rounded-[calc(2rem-6px)] md:rounded-[calc(3rem-8px)] aspect-[4/5] sm:aspect-[16/10] md:aspect-[4/5]" style={{ transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}>
-            {/* Video: src direto (não <source> — iOS Safari tem bugs com child source + autoplay) */}
+          <div className="relative z-10 rounded-[2rem] md:rounded-[3rem] overflow-hidden aspect-[4/5] sm:aspect-[16/10] md:aspect-[4/5] shadow-2xl transform md:rotate-2 transition-transform hover:rotate-0 duration-700 border-[6px] md:border-8 border-white" style={{ isolation: 'isolate', WebkitMaskImage: '-webkit-radial-gradient(white, black)' }}>
             <video
               ref={videoCallbackRef}
               src="/video1.mp4"
@@ -74,10 +72,12 @@ export const Hero: React.FC = () => {
               preload="auto"
               style={{
                 position: 'absolute',
-                inset: 0,
+                top: 0,
+                left: 0,
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
+                display: 'block',
               }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/30 to-transparent pointer-events-none" />
@@ -89,7 +89,6 @@ export const Hero: React.FC = () => {
             >
               {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
             </button>
-            </div>
           </div>
           
           {/* Decorative elements */}
