@@ -72,8 +72,8 @@ export const SocialProof: React.FC = () => {
     },
     { 
       label: 'Refeições entregues por mês', 
-      value: 12, 
-      suffix: 'k',
+      value: 500, 
+      suffix: '',
       prefix: '+',
       icon: Truck,
       color: 'text-brand-earth'

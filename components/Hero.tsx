@@ -148,7 +148,7 @@ export const Hero: React.FC = () => {
               ))}
             </div>
             <span className="text-center sm:text-left font-medium">
-              <strong className="text-brand-blue">+5.000 pets</strong> vivendo mais e melhor com nutrição natural
+              <strong className="text-brand-blue">centenas de pets</strong> vivendo mais e melhor com nutrição natural
             </span>
           </div>
         </div>
