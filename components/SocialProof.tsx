@@ -86,11 +86,12 @@ export const SocialProof: React.FC = () => {
         {/* Partner Logos */}
         <div className="flex flex-col items-center mb-10 md:mb-12">
           <p className="text-neutral-400 font-semibold text-[10px] uppercase tracking-[0.25em] mb-6">Reconhecidos por</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14 opacity-25 grayscale contrast-150">
-             <div className="text-2xl md:text-3xl font-serif text-neutral-900 tracking-tight">VETCARE</div>
-             <div className="text-xl md:text-2xl font-sans font-bold text-neutral-900">PetZine</div>
-             <div className="text-xl md:text-2xl font-serif italic text-neutral-900 tracking-tight">NUTRIDOG</div>
-             <div className="text-2xl md:text-3xl font-sans font-extrabold text-neutral-900 tracking-tighter">ANIMALIA</div>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14 opacity-30 grayscale contrast-150">
+             <img
+               src="/fica_comigo.png"
+               alt="Instituto Fica Comigo"
+               className="h-16 md:h-20 w-auto object-contain"
+             />
           </div>
         </div>
 

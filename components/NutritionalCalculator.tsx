@@ -1,8 +1,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowRight, ArrowLeft, Dog, Cat, Sparkles, Calculator, CheckCircle2, Zap, Shield, Heart } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Sparkles, Calculator, CheckCircle2, Zap, Shield, Heart } from 'lucide-react';
 
-type Species = 'dog' | 'cat' | '';
+type Species = 'dog';
 type Step = 1 | 2 | 3 | 4;
 
 interface PetProfile {
@@ -19,6 +19,12 @@ interface PetProfile {
 const ALLERGY_OPTIONS = ['Frango', 'Carne Bovina', 'Glúten', 'Laticínios', 'Soja', 'Milho', 'Nenhuma'];
 const AGE_OPTIONS = ['Filhote (até 1 ano)', 'Adulto (1-7 anos)', 'Senior (7+ anos)'];
 const SIZE_OPTIONS = ['Mini (até 5kg)', 'Pequeno (5-10kg)', 'Médio (10-25kg)', 'Grande (25-45kg)'];
+function getSizeFromWeight(w: number): string {
+  if (w <= 5) return 'Mini (até 5kg)';
+  if (w <= 10) return 'Pequeno (5-10kg)';
+  if (w <= 25) return 'Médio (10-25kg)';
+  return 'Grande (25-45kg)';
+}
 const ACTIVITY_OPTIONS = [
   { label: 'Sedentário', desc: 'Passeios curtos', value: 'sedentary' },
   { label: 'Moderado', desc: 'Passeios diários', value: 'moderate' },
@@ -52,7 +58,7 @@ function calculateNutrition(p: PetProfile) {
 
 export const NutritionalCalculator: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
-  const [profile, setProfile] = useState<PetProfile>({ name: '', species: '', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: [] });
+  const [profile, setProfile] = useState<PetProfile>({ name: '', species: 'dog', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: [] });
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -63,8 +69,8 @@ export const NutritionalCalculator: React.FC = () => {
   }, []);
 
   const canGo = () => {
-    if (step === 1) return profile.name.trim() !== '' && profile.species !== '';
-    if (step === 2) return profile.weight > 0 && profile.age !== '' && profile.size !== '';
+    if (step === 1) return profile.name.trim() !== '';
+    if (step === 2) return profile.weight > 0 && profile.age !== '';
     if (step === 3) return profile.activityLevel !== '';
     return true;
   };
@@ -116,15 +122,7 @@ export const NutritionalCalculator: React.FC = () => {
                   <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Nome do Pet</label>
                   <input type="text" value={profile.name} onChange={(e) => setProfile({ ...profile, name: e.target.value })} placeholder="Ex: Thor, Luna, Mel..." className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all placeholder:text-neutral-300" id="pet-name-input" />
                 </div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">Espécie</label>
-                <div className="grid grid-cols-2 gap-4">
-                  {(['dog', 'cat'] as const).map(sp => (
-                    <button key={sp} onClick={() => setProfile({ ...profile, species: sp })} className={`p-5 md:p-6 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 ${profile.species === sp ? 'border-brand-blue bg-brand-blueLight/50 shadow-lg shadow-brand-blue/10' : 'border-neutral-200 bg-white hover:border-brand-blue/30'}`} id={`species-${sp}-btn`}>
-                      {sp === 'dog' ? <Dog size={32} className={profile.species === sp ? 'text-brand-blue' : 'text-neutral-400'} /> : <Cat size={32} className={profile.species === sp ? 'text-brand-blue' : 'text-neutral-400'} />}
-                      <span className={`font-bold text-sm ${profile.species === sp ? 'text-brand-blue' : 'text-neutral-600'}`}>{sp === 'dog' ? 'Cão' : 'Gato'}</span>
-                    </button>
-                  ))}
-                </div>
+
               </div>
             )}
 
@@ -134,18 +132,18 @@ export const NutritionalCalculator: React.FC = () => {
                 <p className="text-neutral-500 text-sm mb-8">Essas informações calibram o plano nutricional.</p>
                 <div className="mb-8">
                   <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Peso: <span className="text-brand-blue text-base font-serif normal-case">{profile.weight} kg</span></label>
-                  <input type="range" min="1" max={profile.species === 'cat' ? '15' : '80'} value={profile.weight} onChange={(e) => setProfile({ ...profile, weight: Number(e.target.value) })} className="w-full" id="weight-slider" />
-                  <div className="flex justify-between text-[10px] text-neutral-400 mt-1"><span>1 kg</span><span>{profile.species === 'cat' ? '15' : '80'} kg</span></div>
+                  <input type="range" min="1" max="80" value={profile.weight} onChange={(e) => { const w = Number(e.target.value); setProfile({ ...profile, weight: w, size: getSizeFromWeight(w) }); }} className="w-full" id="weight-slider" />
+                  <div className="flex justify-between text-[10px] text-neutral-400 mt-1"><span>1 kg</span><span>80 kg</span></div>
+                  <div className="mt-3 flex items-center gap-2">
+                    <span className="text-[10px] text-neutral-400 uppercase tracking-wider">Porte detectado:</span>
+                    <span className="text-xs font-semibold text-brand-blue bg-brand-blueLight/50 px-3 py-1 rounded-full border border-brand-blue/20">{getSizeFromWeight(profile.weight)}</span>
+                  </div>
                 </div>
                 <div className="mb-8">
                   <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">Faixa Etária</label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {AGE_OPTIONS.map(a => <button key={a} onClick={() => setProfile({ ...profile, age: a })} className={`px-4 py-3 rounded-xl border text-sm font-medium transition-all ${profile.age === a ? 'border-brand-blue bg-brand-blueLight/50 text-brand-blue' : 'border-neutral-200 bg-white text-neutral-600 hover:border-brand-blue/30'}`}>{a}</button>)}
                   </div>
-                </div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">Porte</label>
-                <div className="grid grid-cols-2 gap-3">
-                  {SIZE_OPTIONS.map(s => <button key={s} onClick={() => setProfile({ ...profile, size: s })} className={`px-3 py-3 rounded-xl border text-xs font-medium transition-all ${profile.size === s ? 'border-brand-blue bg-brand-blueLight/50 text-brand-blue' : 'border-neutral-200 bg-white text-neutral-600 hover:border-brand-blue/30'}`}>{s}</button>)}
                 </div>
               </div>
             )}
@@ -208,7 +206,7 @@ export const NutritionalCalculator: React.FC = () => {
                 <button onClick={() => canGo() && setStep((step + 1) as Step)} disabled={!canGo()} className={`flex items-center gap-2 px-8 py-3 rounded-full font-bold text-sm transition-all ${canGo() ? 'bg-brand-blue text-white hover:bg-brand-blueDark shadow-lg active:scale-95' : 'bg-neutral-100 text-neutral-300 cursor-not-allowed'}`} id="calc-next-btn">Continuar <ArrowRight size={16} /></button>
               </div>
             )}
-            {step === 4 && <div className="flex justify-center mt-6"><button onClick={() => { setStep(1); setProfile({ name: '', species: '', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: [] }); }} className="text-neutral-400 hover:text-neutral-600 font-medium text-xs transition-colors underline underline-offset-4">Calcular para outro pet</button></div>}
+            {step === 4 && <div className="flex justify-center mt-6"><button onClick={() => { setStep(1); setProfile({ name: '', species: 'dog', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: [] }); }} className="text-neutral-400 hover:text-neutral-600 font-medium text-xs transition-colors underline underline-offset-4">Calcular para outro pet</button></div>}
           </div>
         </div>
       </div>
