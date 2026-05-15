@@ -1,6 +1,6 @@
 
-import React, { useState, useRef, useEffect } from 'react';
-import { ArrowRight, ArrowLeft, Sparkles, Calculator, CheckCircle2, Zap, Shield, Heart } from 'lucide-react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { ArrowRight, ArrowLeft, Sparkles, Calculator, CheckCircle2, Zap, Shield, Heart, ChevronDown, UtensilsCrossed } from 'lucide-react';
 
 type Species = 'dog';
 type Step = 1 | 2 | 3 | 4;
@@ -13,12 +13,92 @@ interface PetProfile {
   size: string;
   activityLevel: string;
   isNeutered: boolean;
-  allergies: string[];
+  allergies: string;
+  selectedPlan: string;
 }
 
-const ALLERGY_OPTIONS = ['Frango', 'Carne Bovina', 'Glúten', 'Laticínios', 'Soja', 'Milho', 'Nenhuma'];
+interface MealPlan {
+  id: string;
+  name: string;
+  protein: string;
+  proteinLabel: string;
+  emoji: string;
+  ingredients: string;
+  allergenKeywords: string[];
+}
+
+const ADULT_PLANS: MealPlan[] = [
+  {
+    id: 'frangolino',
+    name: 'Frangolino',
+    protein: 'frango',
+    proteinLabel: '🐔 Frango',
+    emoji: '🐔',
+    ingredients: 'Peito de Frango, Fígado de Frango, Arroz integral, Abobrinha, Cenoura, Gengibre, Salsinha, Farelo de Aveia, Sal Rosa do Himalaia, Óleo de Canola e Food Dog Basic.',
+    allergenKeywords: ['frango', 'ave', 'aves', 'galinha'],
+  },
+  {
+    id: 'nemo',
+    name: 'Procurando Nemo',
+    protein: 'peixe',
+    proteinLabel: '🐟 Peixe',
+    emoji: '🐟',
+    ingredients: 'Tilápia, Arroz branco, Batata doce, Couve Flor, Chuchu, Alecrim, Salsinha, Sal Rosa do Himalaia, Óleo de Canola, Óleo de Girassol e Food Dog Basic.',
+    allergenKeywords: ['peixe', 'tilapia', 'tilápia', 'pescado', 'frutos do mar'],
+  },
+  {
+    id: 'musculo',
+    name: 'Sr. Músculo',
+    protein: 'boi',
+    proteinLabel: '🐂 Boi',
+    emoji: '💪',
+    ingredients: 'Músculo Bovino, Moela, Arroz integral, Inhame, Beterraba, Abóbora Moranga, Sal Rosa do Himalaia, Alecrim, Cúrcuma, Óleo de Canola, Óleo de Girassol e Food Dog Basic.',
+    allergenKeywords: ['boi', 'bovino', 'bovinos', 'carne bovina', 'carne vermelha', 'vaca'],
+  },
+  {
+    id: 'baby',
+    name: 'Baby o Porquinho',
+    protein: 'porco',
+    proteinLabel: '🐷 Porco',
+    emoji: '🐷',
+    ingredients: 'Lombo Suíno, Arroz branco, Batata doce, Chuchu, Brócolis, Tomilho, Manjericão, Sal Rosa do Himalaia, Óleo de Canola, Óleo de Girassol e Food Dog Basic.',
+    allergenKeywords: ['porco', 'suino', 'suíno', 'carne suína', 'carne suina'],
+  },
+];
+
+const SENIOR_PLANS: MealPlan[] = [
+  {
+    id: 'sr-musculo',
+    name: 'Sr. Músculo',
+    protein: 'boi',
+    proteinLabel: '🐂 Boi',
+    emoji: '💪',
+    ingredients: 'Músculo bovino, Coração bovino, Lentilha, Batata doce, Beterraba, Couve-flor, Couve manteiga, Óleo de girassol, Óleo de linhaça, Sal rosa do Himalaia, Farelo de aveia, Gengibre, Alecrim desidratado, Food Dog Sênior.',
+    allergenKeywords: ['boi', 'bovino', 'bovinos', 'carne bovina', 'carne vermelha', 'vaca'],
+  },
+  {
+    id: 'sr-frangolino',
+    name: 'Sr. Frangolino',
+    protein: 'frango',
+    proteinLabel: '🐔 Frango',
+    emoji: '🐔',
+    ingredients: 'Peito de Frango, Fígado de Frango, Quinoa, Inhame, Cenoura, Abobrinha, Brócolis, Salsinha, Cúrcuma, Farelo de Aveia, Sal Rosa do Himalaia, Óleo de Linhaça, Óleo de Girassol e Food Dog Sênior.',
+    allergenKeywords: ['frango', 'ave', 'aves', 'galinha'],
+  },
+];
+
+function getAvailablePlans(allergies: string, planList: MealPlan[]): MealPlan[] {
+  const lower = allergies.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (!lower.trim()) return planList;
+  return planList.filter(plan => {
+    return !plan.allergenKeywords.some(kw => {
+      const kwNorm = kw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return lower.includes(kwNorm);
+    });
+  });
+}
+
 const AGE_OPTIONS = ['Filhote (até 1 ano)', 'Adulto (1-7 anos)', 'Senior (7+ anos)'];
-const SIZE_OPTIONS = ['Mini (até 5kg)', 'Pequeno (5-10kg)', 'Médio (10-25kg)', 'Grande (25-45kg)'];
 function getSizeFromWeight(w: number): string {
   if (w <= 5) return 'Mini (até 5kg)';
   if (w <= 10) return 'Pequeno (5-10kg)';
@@ -52,13 +132,15 @@ function calculateNutrition(p: PetProfile) {
   if (p.age.includes('Filhote')) { prios.push('DHA para desenvolvimento cerebral', 'Cálcio/Fósforo para ossos', 'Proteína elevada'); }
   else if (p.age.includes('Senior')) { prios.push('Glucosamina para articulações', 'Antioxidantes para imunidade', 'Fibras digestivas'); }
   else { prios.push('Proteína de alta biodisponibilidade', 'Ômega 3 e 6 para pelagem', 'Fibras prebióticas'); }
-  if (p.allergies.length > 0 && !p.allergies.includes('Nenhuma')) prios.push(`Fórmula sem ${p.allergies.join(', ')}`);
+  if (p.allergies.trim().length > 0) prios.push(`Fórmula sem ${p.allergies.trim()}`);
   return { dailyCal, dailyG, monthKg, priceCoz, priceRac, vetSave, prios };
 }
 
+const initialProfile: PetProfile = { name: '', species: 'dog', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: '', selectedPlan: '' };
+
 export const NutritionalCalculator: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
-  const [profile, setProfile] = useState<PetProfile>({ name: '', species: 'dog', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: [] });
+  const [profile, setProfile] = useState<PetProfile>(initialProfile);
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -68,20 +150,40 @@ export const NutritionalCalculator: React.FC = () => {
     return () => obs.disconnect();
   }, []);
 
+  const isAdult = profile.age.includes('Adulto');
+  const isSenior = profile.age.includes('Senior');
+  const isFilhote = profile.age.includes('Filhote');
+  const hasPlans = isAdult || isSenior;
+  const currentPlanList = isSenior ? SENIOR_PLANS : ADULT_PLANS;
+  const availablePlans = useMemo(() => getAvailablePlans(profile.allergies, currentPlanList), [profile.allergies, currentPlanList]);
+
+  // Auto-select plan when only one is available
+  useEffect(() => {
+    if (hasPlans && availablePlans.length === 1) {
+      setProfile(prev => ({ ...prev, selectedPlan: availablePlans[0].id }));
+    } else if (hasPlans && availablePlans.length > 1 && profile.selectedPlan) {
+      if (!availablePlans.find(p => p.id === profile.selectedPlan)) {
+        setProfile(prev => ({ ...prev, selectedPlan: '' }));
+      }
+    }
+  }, [hasPlans, availablePlans, profile.selectedPlan]);
+
   const canGo = () => {
     if (step === 1) return profile.name.trim() !== '';
     if (step === 2) return profile.weight > 0 && profile.age !== '';
-    if (step === 3) return profile.activityLevel !== '';
+    if (step === 3) {
+      if (!profile.activityLevel) return false;
+      if (hasPlans && availablePlans.length > 1 && !profile.selectedPlan) return false;
+      if (hasPlans && availablePlans.length === 0) return false;
+      return true;
+    }
     return true;
   };
 
-  const toggleAllergy = (a: string) => {
-    if (a === 'Nenhuma') { setProfile({ ...profile, allergies: ['Nenhuma'] }); return; }
-    const f = profile.allergies.filter(x => x !== 'Nenhuma');
-    setProfile({ ...profile, allergies: f.includes(a) ? f.filter(x => x !== a) : [...f, a] });
-  };
-
   const result = step === 4 ? calculateNutrition(profile) : null;
+  const allPlans = [...ADULT_PLANS, ...SENIOR_PLANS];
+  const selectedPlanData = allPlans.find(p => p.id === profile.selectedPlan);
+  const lineLabel = isSenior ? 'Linha Sênior' : 'Linha Adulto';
 
   return (
     <section id="calculadora" ref={ref} className="py-20 md:py-32 bg-white relative overflow-hidden">
@@ -92,9 +194,9 @@ export const NutritionalCalculator: React.FC = () => {
             <Calculator size={14} /> Calculadora de Vitalidade
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-neutral-900 mb-4 leading-tight">
-            Descubra o plano ideal <br className="hidden sm:block"/><span className="italic text-brand-red">para o seu pet</span>
+            Descubra o plano ideal <br className="hidden sm:block" /><span className="italic text-brand-red">para o seu pet</span>
           </h2>
-          <p className="text-neutral-500 text-base md:text-lg max-w-2xl mx-auto">Em menos de 1 minuto, nosso algoritmo nutricional gera um Plano de Vitalidade personalizado.</p>
+          <p className="text-neutral-500 text-base md:text-lg max-w-2xl mx-auto">Em menos de 1 minuto, nosso algoritmo nutricional gera um Plano a pronta entrega.</p>
         </div>
 
         {/* Progress */}
@@ -122,7 +224,6 @@ export const NutritionalCalculator: React.FC = () => {
                   <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Nome do Pet</label>
                   <input type="text" value={profile.name} onChange={(e) => setProfile({ ...profile, name: e.target.value })} placeholder="Ex: Thor, Luna, Mel..." className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all placeholder:text-neutral-300" id="pet-name-input" />
                 </div>
-
               </div>
             )}
 
@@ -142,7 +243,7 @@ export const NutritionalCalculator: React.FC = () => {
                 <div className="mb-8">
                   <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">Faixa Etária</label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {AGE_OPTIONS.map(a => <button key={a} onClick={() => setProfile({ ...profile, age: a })} className={`px-4 py-3 rounded-xl border text-sm font-medium transition-all ${profile.age === a ? 'border-brand-blue bg-brand-blueLight/50 text-brand-blue' : 'border-neutral-200 bg-white text-neutral-600 hover:border-brand-blue/30'}`}>{a}</button>)}
+                    {AGE_OPTIONS.map(a => <button key={a} onClick={() => setProfile({ ...profile, age: a, selectedPlan: '' })} className={`px-4 py-3 rounded-xl border text-sm font-medium transition-all ${profile.age === a ? 'border-brand-blue bg-brand-blueLight/50 text-brand-blue' : 'border-neutral-200 bg-white text-neutral-600 hover:border-brand-blue/30'}`}>{a}</button>)}
                   </div>
                 </div>
               </div>
@@ -159,11 +260,51 @@ export const NutritionalCalculator: React.FC = () => {
                   </div>
                 </div>
                 <div className="mb-6">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">Alergias ou Restrições</label>
-                  <div className="flex flex-wrap gap-2">
-                    {ALLERGY_OPTIONS.map(a => <button key={a} onClick={() => toggleAllergy(a)} className={`px-4 py-2 rounded-full text-xs font-semibold border transition-all ${profile.allergies.includes(a) ? a === 'Nenhuma' ? 'border-brand-sage bg-brand-sageLight text-brand-sageDark' : 'border-brand-red bg-brand-redLight text-brand-red' : 'border-neutral-200 bg-white text-neutral-500 hover:border-neutral-300'}`}>{a}</button>)}
-                  </div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Alergias ou Restrições</label>
+                  <input type="text" value={profile.allergies} onChange={(e) => setProfile({ ...profile, allergies: e.target.value, selectedPlan: '' })} placeholder="Ex: Frango, Glúten, Laticínios... (deixe vazio se não houver)" className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all placeholder:text-neutral-300" id="allergies-input" />
                 </div>
+
+                {/* Protein preference select - for adult/senior pets with multiple available plans */}
+                {hasPlans && availablePlans.length > 1 && (
+                  <div className="mb-6 animate-fade-in">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Proteína Preferida</label>
+                    <div className="relative">
+                      <select
+                        value={profile.selectedPlan}
+                        onChange={(e) => setProfile({ ...profile, selectedPlan: e.target.value })}
+                        className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all appearance-none cursor-pointer"
+                        id="protein-select"
+                      >
+                        <option value="">Selecione a proteína principal...</option>
+                        {availablePlans.map(plan => (
+                          <option key={plan.id} value={plan.id}>{plan.proteinLabel} — {plan.name}</option>
+                        ))}
+                      </select>
+                      <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
+                    </div>
+                  </div>
+                )}
+
+                {/* Auto-selected plan message */}
+                {hasPlans && availablePlans.length === 1 && (
+                  <div className="mb-6 p-4 bg-brand-sageLight/50 rounded-xl border border-brand-sage/20 animate-fade-in">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{availablePlans[0].emoji}</span>
+                      <div>
+                        <p className="text-sm font-semibold text-brand-sageDark">Plano recomendado automaticamente</p>
+                        <p className="text-xs text-neutral-600">Com base nas restrições, o plano ideal é o <strong>{availablePlans[0].name}</strong></p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* No plans available */}
+                {hasPlans && availablePlans.length === 0 && (
+                  <div className="mb-6 p-4 bg-brand-redLight/50 rounded-xl border border-brand-red/20 animate-fade-in">
+                    <p className="text-sm text-brand-red font-medium">Nenhum plano padrão disponível com essas restrições. Entre em contato para um plano personalizado.</p>
+                  </div>
+                )}
+
                 <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-neutral-200">
                   <input type="checkbox" id="neutered-check" checked={profile.isNeutered} onChange={(e) => setProfile({ ...profile, isNeutered: e.target.checked })} className="w-5 h-5 rounded" />
                   <label htmlFor="neutered-check" className="text-sm text-neutral-700 font-medium cursor-pointer">{profile.name} é castrado(a)</label>
@@ -177,6 +318,37 @@ export const NutritionalCalculator: React.FC = () => {
                   <div className="inline-flex items-center gap-2 bg-brand-sageLight text-brand-sageDark px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-4"><Sparkles size={14} /> Plano Gerado</div>
                   <h3 className="text-2xl md:text-3xl font-serif text-neutral-900">Plano de Vitalidade para <span className="text-brand-red italic">{profile.name}</span></h3>
                 </div>
+
+                {/* Filhote - personalized order message */}
+                {isFilhote && (
+                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200/50 mb-6 shadow-sm">
+                    <div className="flex items-start gap-4">
+                      <span className="text-4xl">🐾</span>
+                      <div className="flex-1">
+                        <h5 className="text-lg font-serif text-neutral-900 font-bold mb-2">Cardápio Personalizado para Filhote</h5>
+                        <p className="text-sm text-neutral-600 leading-relaxed">Para filhotes, cada pedido é preparado de forma <strong>100% personalizada</strong> pelo nosso time de nutrição veterinária, respeitando as necessidades específicas de crescimento de <strong>{profile.name}</strong>.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Recommended Plan Card - for adult/senior pets */}
+                {hasPlans && selectedPlanData && (
+                  <div className="bg-gradient-to-br from-brand-cream to-white rounded-2xl p-5 border border-brand-sage/20 mb-6 shadow-sm">
+                    <div className="flex items-center gap-2 mb-3">
+                      <UtensilsCrossed size={16} className="text-brand-sage" />
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-500">Plano Recomendado — {lineLabel}</h4>
+                    </div>
+                    <div className="flex items-start gap-4">
+                      <span className="text-4xl">{selectedPlanData.emoji}</span>
+                      <div className="flex-1">
+                        <h5 className="text-lg font-serif text-neutral-900 font-bold mb-1">{selectedPlanData.name}</h5>
+                        <p className="text-xs text-neutral-500 leading-relaxed">{selectedPlanData.ingredients}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-3 gap-3 md:gap-4 mb-8">
                   <div className="bg-white rounded-2xl p-4 text-center border border-neutral-100 shadow-sm"><div className="text-2xl md:text-3xl font-serif text-brand-blue">{result.dailyCal}</div><div className="text-[10px] md:text-xs text-neutral-500 mt-1">kcal/dia</div></div>
                   <div className="bg-white rounded-2xl p-4 text-center border border-neutral-100 shadow-sm"><div className="text-2xl md:text-3xl font-serif text-brand-blue">{result.dailyG}g</div><div className="text-[10px] md:text-xs text-neutral-500 mt-1">porção/dia</div></div>
@@ -193,9 +365,22 @@ export const NutritionalCalculator: React.FC = () => {
                     <div><div className="text-brand-sageLight text-[10px] uppercase tracking-wider mb-1">Plano Cozinha Pet</div><div className="text-xl font-serif">R$ {result.priceCoz}</div></div>
                   </div>
                 </div>
-                <button className="w-full bg-brand-red text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-brand-redDark transition-all shadow-xl hover:shadow-brand-red/30 flex items-center justify-center gap-3 group active:scale-[0.98]" id="activate-plan-cta">
-                  <Heart size={20} fill="white" /> Ativar Plano de {profile.name} <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                </button>
+
+                {/* CTA Buttons */}
+                {isFilhote ? (
+                  <button className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98]" id="custom-plan-cta">
+                    <Sparkles size={20} /> Solicitar Cardápio Personalizado <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    <button className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-2xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98] ring-2 ring-emerald-400/30 ring-offset-2" id="custom-plan-cta">
+                      <Sparkles size={20} /> Cardápio Personalizado <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                    <button className="w-full bg-brand-red text-white py-4 rounded-2xl font-bold text-sm md:text-base hover:bg-brand-redDark transition-all shadow-lg hover:shadow-brand-red/20 flex items-center justify-center gap-3 group active:scale-[0.98]" id="activate-plan-cta">
+                      <Heart size={18} fill="white" /> Pedido a Pronta Entrega <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                )}
                 <p className="text-center text-xs text-neutral-400 mt-3">Garantia de 30 dias • Cancele quando quiser • Frete grátis no 1º pedido</p>
               </div>
             )}
@@ -206,7 +391,7 @@ export const NutritionalCalculator: React.FC = () => {
                 <button onClick={() => canGo() && setStep((step + 1) as Step)} disabled={!canGo()} className={`flex items-center gap-2 px-8 py-3 rounded-full font-bold text-sm transition-all ${canGo() ? 'bg-brand-blue text-white hover:bg-brand-blueDark shadow-lg active:scale-95' : 'bg-neutral-100 text-neutral-300 cursor-not-allowed'}`} id="calc-next-btn">Continuar <ArrowRight size={16} /></button>
               </div>
             )}
-            {step === 4 && <div className="flex justify-center mt-6"><button onClick={() => { setStep(1); setProfile({ name: '', species: 'dog', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: [] }); }} className="text-neutral-400 hover:text-neutral-600 font-medium text-xs transition-colors underline underline-offset-4">Calcular para outro pet</button></div>}
+            {step === 4 && <div className="flex justify-center mt-6"><button onClick={() => { setStep(1); setProfile(initialProfile); }} className="text-neutral-400 hover:text-neutral-600 font-medium text-xs transition-colors underline underline-offset-4">Calcular para outro pet</button></div>}
           </div>
         </div>
       </div>
