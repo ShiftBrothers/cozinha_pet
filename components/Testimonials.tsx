@@ -1,78 +1,9 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { Quote, Star, ChevronLeft, ChevronRight, BadgeCheck } from 'lucide-react';
-
-interface Testimonial {
-  name: string;
-  petName: string;
-  petBreed: string;
-  avatar: string;
-  text: string;
-  result: string;
-  rating: number;
-  category: 'dog' | 'cat' | 'vet';
-}
-
-const testimonials: Testimonial[] = [
-  {
-    name: 'Mariana Costa',
-    petName: 'Bob',
-    petBreed: 'Labrador',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100',
-    text: 'Bob tinha problemas de digestão há anos. Com 3 semanas de Cozinha Pet, as fezes normalizaram e ele parou de ter gases. O veterinário ficou impressionado.',
-    result: 'Digestão normalizada em 3 semanas',
-    rating: 5,
-    category: 'dog'
-  },
-  {
-    name: 'Pedro Oliveira',
-    petName: 'Nina',
-    petBreed: 'Gata Persa',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100',
-    text: 'Nina sempre foi difícil para comer. Testei 3 marcas de AN sem sucesso. Na Cozinha Pet, ela lambe o pote. O pelo está irreconhecível de tão bonito.',
-    result: 'Aceitação alimentar em 5 dias',
-    rating: 5,
-    category: 'cat'
-  },
-  {
-    name: 'Dra. Ana Paula Reis',
-    petName: '',
-    petBreed: 'Veterinária Nutróloga — CRMV-SP 18.442',
-    avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=100',
-    text: 'Recomendo a Cozinha Pet para meus pacientes com segurança. O controle de qualidade e a formulação seguem padrões que raramente vejo no mercado de AN brasileiro.',
-    result: 'Recomendada por profissionais',
-    rating: 5,
-    category: 'vet'
-  },
-  {
-    name: 'Fernanda Lima',
-    petName: 'Simba',
-    petBreed: 'SRD',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100',
-    text: 'Simba é alérgico a frango e soja. A Cozinha Pet fez uma fórmula sem esses ingredientes. Em 40 dias, zero coceira. Ele voltou a brincar como filhote.',
-    result: 'Alergias eliminadas em 40 dias',
-    rating: 5,
-    category: 'dog'
-  },
-  {
-    name: 'Lucas Mendes',
-    petName: 'Mel',
-    petBreed: 'Shih Tzu',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100',
-    text: 'A praticidade me conquistou. Chega congelado, descongelo e sirvo. Mel ama, come tudo em segundos. O pelo dela brilha de um jeito que nunca vi com ração.',
-    result: 'Pelagem renovada em 25 dias',
-    rating: 5,
-    category: 'dog'
-  },
-];
-
-const FILTER_LABELS = { all: 'Todos', dog: 'Cães', cat: 'Gatos', vet: 'Veterinários' };
+import { Award, BadgeCheck, Instagram, CheckCircle2 } from 'lucide-react';
 
 export const Testimonials: React.FC = () => {
-  const [filter, setFilter] = useState<'all' | 'dog' | 'cat' | 'vet'>('all');
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setIsVisible(true); obs.disconnect(); } }, { threshold: 0.1 });
@@ -80,87 +11,89 @@ export const Testimonials: React.FC = () => {
     return () => obs.disconnect();
   }, []);
 
-  const filtered = filter === 'all' ? testimonials : testimonials.filter(t => t.category === filter);
-
-  const scroll = (dir: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const amount = dir === 'left' ? -350 : 350;
-      scrollRef.current.scrollBy({ left: amount, behavior: 'smooth' });
-    }
-  };
-
   return (
-    <section className="py-20 md:py-32 bg-white">
-      <div ref={ref} className={`max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-        <div className="text-center mb-10 md:mb-14">
-          <div className="inline-flex items-center gap-2 bg-brand-blueLight text-brand-blue px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-6 border border-brand-blue/10">
-            <Quote size={14} /> Depoimentos Reais
+    <section id="parceiros" className="py-20 md:py-32 bg-white relative overflow-hidden">
+      {/* Decorative background shapes */}
+      <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-brand-blueLight/30 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-brand-sageLight/20 rounded-full blur-[80px] translate-x-1/4 translate-y-1/4"></div>
+
+      <div ref={ref} className={`max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className="text-center mb-16 md:mb-20">
+          <div className="inline-flex items-center gap-2 bg-brand-sageLight text-brand-sageDark px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-6 border border-brand-sage/10">
+            <Award size={14} /> Validação Profissional
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-neutral-900 mb-4 leading-tight">
-            O que nossos <span className="italic text-brand-red">tutores dizem</span>
+            Veterinários e <span className="italic text-brand-red">Nutricionistas Parceiros</span>
           </h2>
-          <p className="text-neutral-500 text-base md:text-lg max-w-xl mx-auto">
-            Resultados específicos e mensuráveis. Não apenas "adorei".
+          <p className="text-neutral-500 text-base md:text-lg max-w-2xl mx-auto">
+            Nossos cardápios são formulados e validados por especialistas em nutrição veterinária, garantindo o equilíbrio perfeito para a vitalidade do seu pet.
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="flex justify-center gap-2 mb-10">
-          {(Object.entries(FILTER_LABELS) as [string, string][]).map(([key, label]) => (
-            <button
-              key={key}
-              onClick={() => setFilter(key as typeof filter)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all ${
-                filter === key
-                  ? 'bg-neutral-900 text-white shadow-md'
-                  : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* Carousel */}
-        <div className="relative">
-          <button onClick={() => scroll('left')} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors hidden md:flex border border-neutral-100 -ml-3" aria-label="Anterior">
-            <ChevronLeft size={20} />
-          </button>
-          <button onClick={() => scroll('right')} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors hidden md:flex border border-neutral-100 -mr-3" aria-label="Próximo">
-            <ChevronRight size={20} />
-          </button>
-
-          <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            {filtered.map((t, i) => (
-              <div key={i} className="flex-shrink-0 w-[300px] md:w-[350px] snap-start bg-brand-cream rounded-2xl p-6 border border-neutral-200/50 hover:shadow-lg transition-all">
-                {/* Header */}
-                <div className="flex items-start gap-3 mb-4">
-                  <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm" />
-                  <div className="flex-grow min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-sm text-neutral-900 truncate">{t.name}</span>
-                      <BadgeCheck size={14} className="text-brand-blue flex-shrink-0" />
+        <div className="max-w-3xl mx-auto">
+          {/* Dra. Daniela Facanali - Featured Spotlight */}
+          <div className="bg-gradient-to-br from-brand-cream/80 to-white rounded-3xl p-8 md:p-10 border border-neutral-200/60 shadow-xl flex flex-col justify-between hover:shadow-2xl transition-all duration-300 relative overflow-hidden group">
+            {/* Visual glow on card hover */}
+            <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-brand-sage/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform duration-500"></div>
+            
+            <div>
+              {/* Photo Area */}
+              <div className="relative mb-8 text-center">
+                <a 
+                  href="https://www.instagram.com/daninutrivet/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="relative block w-44 h-44 md:w-52 md:h-52 mx-auto rounded-full overflow-hidden border-4 border-brand-sageLight hover:border-brand-sage shadow-2xl transition-all duration-300 active:scale-95 group/photo"
+                  title="Ver Instagram da Dra. Daniela"
+                >
+                  <img 
+                    src="/daniela_facanali.jpg" 
+                    alt="Dra. Daniela Facanali" 
+                    className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500" 
+                  />
+                  <div className="absolute inset-0 bg-neutral-900/40 opacity-0 group-hover/photo:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                    <div className="text-white text-center">
+                      <Instagram size={24} className="mx-auto mb-1 animate-bounce" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider">Ver Instagram</span>
                     </div>
-                    <span className="text-xs text-neutral-500">{t.petName ? `Tutor(a) de ${t.petName} • ${t.petBreed}` : t.petBreed}</span>
                   </div>
-                </div>
-
-                {/* Stars */}
-                <div className="flex gap-0.5 mb-3">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} size={14} fill="#da1f26" className="text-brand-red" />
-                  ))}
-                </div>
-
-                {/* Quote */}
-                <p className="text-sm text-neutral-700 leading-relaxed mb-4">"{t.text}"</p>
-
-                {/* Result Tag */}
-                <div className="bg-brand-sageLight px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5">
-                  <span className="text-[10px] font-bold text-brand-sageDark uppercase tracking-wider">{t.result}</span>
-                </div>
+                </a>
               </div>
-            ))}
+
+              {/* Info */}
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <h3 className="text-2xl font-bold text-neutral-900">Dra. Daniela Facanali</h3>
+                  <BadgeCheck size={20} className="text-brand-blue" />
+                </div>
+                <p className="text-brand-sageDark font-semibold text-sm mb-1">Médica Veterinária & Nutricionista Parceira</p>
+                <p className="text-xs text-neutral-400 font-mono mb-6">CRMV-SP 35.845</p>
+                
+                <p className="text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto mb-6">
+                  "Dedicada à Nutrição Clínica de cães e gatos, atua diretamente no desenvolvimento e validação técnica dos cardápios da Cozinha Pet. Assegura que cada porção forneça a biodisponibilidade exata de vitaminas, minerais e aminoácidos que promovem a saúde intestinal, brilho na pelagem e a longevidade ativa do seu melhor amigo."
+                </p>
+              </div>
+
+              {/* Specialties */}
+              <div className="flex flex-wrap justify-center gap-2 mb-8">
+                {['Nutrição Clínica Vet', 'Formulações Científicas', 'Dieta Natural Customizada'].map((spec) => (
+                  <span key={spec} className="bg-white border border-brand-sage/20 text-brand-sageDark px-4 py-1.5 rounded-full text-xs font-semibold">
+                    {spec}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center mt-auto">
+              <a 
+                href="https://www.instagram.com/daninutrivet/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-2 bg-brand-sage text-white hover:bg-brand-sageDark px-8 py-3.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-brand-sage/20 active:scale-95"
+              >
+                <Instagram size={18} /> Acompanhar no Instagram
+              </a>
+            </div>
           </div>
         </div>
       </div>

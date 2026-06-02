@@ -17,9 +17,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -48,8 +46,8 @@
                         }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Instrument Serif', 'serif'],
+                        sans: ['Roboto Slab', 'serif'],
+                        serif: ['Roboto Slab', 'serif'],
                     },
                     animation: {
                         'bounce-subtle': 'bounce-subtle 3s ease-in-out infinite',
@@ -102,7 +100,8 @@
     </script>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto Slab', serif;
+            font-weight: 300; /* Use a clean, modern light/regular weight for body */
             background-color: #FAF7F2;
             color: #001a35;
             -webkit-font-smoothing: antialiased;
@@ -110,7 +109,8 @@
         }
 
         .font-serif {
-            font-family: 'Instrument Serif', serif;
+            font-family: 'Roboto Slab', serif;
+            font-weight: 800; /* Bold, high-impact weight for titles to stand out */
         }
 
         .bento-inner-shadow {
@@ -209,6 +209,56 @@
         /* Smooth anchor scroll */
         html {
             scroll-behavior: smooth;
+        }
+
+        /* Animated Checkmark SVG */
+        .checkmark-circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 4;
+            stroke-miterlimit: 10;
+            stroke: #10b981; /* Emerald-500 */
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark-wrap {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 4;
+            stroke: #fff;
+            stroke-miterlimit: 10;
+            margin: 20px auto;
+            box-shadow: inset 0px 0px 0px #10b981;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s forwards;
+        }
+
+        .checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+        @keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+            50% {
+                transform: scale3d(1.15, 1.15, 1);
+            }
+        }
+        @keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 40px #10b981;
+            }
         }
     </style>
     <script type="importmap">

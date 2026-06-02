@@ -112,28 +112,179 @@ const ACTIVITY_OPTIONS = [
   { label: 'Muito Ativo', desc: 'Trabalho, competição', value: 'very_active' },
 ];
 
+function getBodyPercent(ageGroup: string, activity: string, weight: number): number {
+  const isFilhote = ageGroup.includes('Filhote');
+  const isSenior = ageGroup.includes('Senior');
+  const isAdult = ageGroup.includes('Adulto');
+
+  let pct = 3.5;
+
+  if (isAdult) {
+    if (activity === 'sedentary') {
+      pct = weight <= 5 ? 2.5 : weight >= 25 ? 2.0 : 2.25;
+    } else if (activity === 'moderate') {
+      pct = weight <= 5 ? 4.0 : weight >= 25 ? 3.0 : 3.5;
+    } else { // active or very_active
+      pct = weight <= 5 ? 6.0 : weight >= 25 ? 5.0 : 5.5;
+    }
+  } else if (isSenior) {
+    if (activity === 'sedentary') {
+      pct = 2.0;
+    } else if (activity === 'moderate') {
+      pct = weight <= 5 ? 3.0 : weight >= 25 ? 2.5 : 2.75;
+    } else { // active or very_active
+      pct = weight <= 5 ? 4.0 : weight >= 25 ? 3.5 : 3.75;
+    }
+  } else if (isFilhote) {
+    if (activity === 'sedentary') {
+      pct = weight <= 5 ? 7.0 : weight >= 25 ? 6.0 : 6.5;
+    } else if (activity === 'moderate') {
+      pct = weight <= 5 ? 9.0 : weight >= 25 ? 8.0 : 8.5;
+    } else { // active or very_active
+      pct = 10.0;
+    }
+  }
+
+  return pct;
+}
+
+interface KitOption {
+  id: string;
+  name: string;
+  description: string;
+  priceFormula: (dailyPortion: number) => { original: number; discounted: number };
+}
+
+const getKitsForStage = (ageGroup: string): KitOption[] => {
+  const isSenior = ageGroup.includes('Senior');
+  const isFilhote = ageGroup.includes('Filhote');
+
+  if (isSenior) {
+    return [
+      {
+        id: 'frango',
+        name: 'Kit Sênior Frango',
+        description: '30 dias de Frango Sênior',
+        priceFormula: (dp) => {
+          const val = (dp / 250) * 450;
+          return { original: Math.round(val), discounted: Math.round(val * 0.9) };
+        }
+      },
+      {
+        id: 'carne',
+        name: 'Kit Sênior Carne',
+        description: '30 dias de Bovino Sênior',
+        priceFormula: (dp) => {
+          const val = (dp / 250) * 600;
+          return { original: Math.round(val), discounted: Math.round(val * 0.9) };
+        }
+      },
+      {
+        id: 'f_c',
+        name: 'Kit Sênior Misto (F+C)',
+        description: '15d Frango Sênior + 15d Bovino Sênior',
+        priceFormula: (dp) => {
+          const val = (dp / 250) * 525;
+          return { original: Math.round(val), discounted: Math.round(val * 0.9) };
+        }
+      }
+    ];
+  }
+
+  if (isFilhote) {
+    return [
+      {
+        id: 'frango',
+        name: 'Kit Filhote Frango',
+        description: '30 dias de Frango Filhote',
+        priceFormula: (dp) => {
+          const val = (dp / 250) * 450;
+          return { original: Math.round(val), discounted: Math.round(val * 0.9) };
+        }
+      },
+      {
+        id: 'carne',
+        name: 'Kit Filhote Carne',
+        description: '30 dias de Bovino Filhote',
+        priceFormula: (dp) => {
+          const val = (dp / 250) * 600;
+          return { original: Math.round(val), discounted: Math.round(val * 0.9) };
+        }
+      },
+      {
+        id: 'f_c',
+        name: 'Kit Filhote Misto (F+C)',
+        description: '15d Frango Filhote + 15d Bovino Filhote',
+        priceFormula: (dp) => {
+          const val = (dp / 250) * 525;
+          return { original: Math.round(val), discounted: Math.round(val * 0.9) };
+        }
+      }
+    ];
+  }
+
+  // Adulto
+  return [
+    {
+      id: 'completo',
+      name: 'Kit Adulto Completo',
+      description: 'Todas as proteínas (8d Frango, 8d Lombo, 8d Bovino, 6d Peixe)',
+      priceFormula: (dp) => {
+        const val = (dp / 250) * 452;
+        return { original: Math.round(val), discounted: Math.round(val * 0.9) };
+      }
+    },
+    {
+      id: 'f_c_l',
+      name: 'Kit Adulto Misto (F+C+L)',
+      description: 'Três proteínas (10d Frango, 10d Bovino, 10d Lombo)',
+      priceFormula: (dp) => {
+        const val = (dp / 250) * 400;
+        return { original: Math.round(val), discounted: Math.round(val * 0.9) };
+      }
+    },
+    {
+      id: 'f_c',
+      name: 'Kit Adulto Misto (F+C)',
+      description: 'Duas proteínas (15d Frango, 15d Bovino)',
+      priceFormula: (dp) => {
+        const val = (dp / 250) * 375;
+        return { original: Math.round(val), discounted: Math.round(val * 0.9) };
+      }
+    },
+    {
+      id: 'f_l',
+      name: 'Kit Adulto Misto (F+L)',
+      description: 'Duas proteínas (15d Frango, 15d Lombo)',
+      priceFormula: (dp) => {
+        const val = (dp / 250) * 390;
+        return { original: Math.round(val), discounted: Math.round(val * 0.9) };
+      }
+    }
+  ];
+};
+
 function calculateNutrition(p: PetProfile) {
+  const pct = getBodyPercent(p.age, p.activityLevel, p.weight);
+  const dailyG = Math.round(pct * p.weight * 10);
+  const monthKg = Math.round((dailyG * 30) / 1000 * 10) / 10;
+  
   const rer = 70 * Math.pow(p.weight, 0.75);
   let actMul = p.activityLevel === 'sedentary' ? 1.4 : p.activityLevel === 'moderate' ? 1.6 : p.activityLevel === 'active' ? 1.8 : 2.5;
   let ageMul = p.age.includes('Filhote') ? 2.5 : p.age.includes('Senior') ? 0.85 : 1;
   let neutMul = p.isNeutered ? 0.9 : 1;
   const dailyCal = Math.round(rer * actMul * ageMul * neutMul);
-  const dailyG = Math.round(dailyCal / 1.8);
-  const monthKg = Math.round((dailyG * 30) / 1000 * 10) / 10;
-  // Degressive pricing per kg
-  let priceCoz: number;
-  if (monthKg <= 5) priceCoz = Math.round(monthKg * 36);
-  else if (monthKg <= 12) priceCoz = Math.round(5 * 36 + (monthKg - 5) * 26);
-  else priceCoz = Math.round(5 * 36 + 7 * 26 + (monthKg - 12) * 20);
-  priceCoz = Math.max(priceCoz, 189);
+  
   const priceRac = Math.round(p.weight * 15 + 120);
   const vetSave = Math.round(220 + (p.weight * 6));
+
   const prios: string[] = [];
   if (p.age.includes('Filhote')) { prios.push('DHA para desenvolvimento cerebral', 'Cálcio/Fósforo para ossos', 'Proteína elevada'); }
   else if (p.age.includes('Senior')) { prios.push('Glucosamina para articulações', 'Antioxidantes para imunidade', 'Fibras digestivas'); }
   else { prios.push('Proteína de alta biodisponibilidade', 'Ômega 3 e 6 para pelagem', 'Fibras prebióticas'); }
   if (p.allergies.trim().length > 0) prios.push(`Fórmula sem ${p.allergies.trim()}`);
-  return { dailyCal, dailyG, monthKg, priceCoz, priceRac, vetSave, prios };
+  
+  return { dailyCal, dailyG, monthKg, priceRac, vetSave, prios, pct };
 }
 
 const initialProfile: PetProfile = { name: '', species: 'dog', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: '', selectedPlan: '' };
@@ -142,7 +293,23 @@ export const NutritionalCalculator: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
   const [profile, setProfile] = useState<PetProfile>(initialProfile);
   const [isVisible, setIsVisible] = useState(false);
+  const [sendingState, setSendingState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [tutorName, setTutorName] = useState('');
+  const [tutorPhone, setTutorPhone] = useState('');
+  const [chosenOption, setChosenOption] = useState<'cardapio_personalizado' | 'pronta_entrega' | null>(null);
+  const [showLeadForm, setShowLeadForm] = useState(false);
+  const [selectedKitId, setSelectedKitId] = useState<string>('');
   const ref = useRef<HTMLDivElement>(null);
+
+  // Auto-select first kit on entering step 4
+  useEffect(() => {
+    if (step === 4) {
+      const kits = getKitsForStage(profile.age);
+      if (kits.length > 0) {
+        setSelectedKitId(kits[0].id);
+      }
+    }
+  }, [step, profile.age]);
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setIsVisible(true); obs.disconnect(); } }, { threshold: 0.1 });
@@ -178,6 +345,78 @@ export const NutritionalCalculator: React.FC = () => {
       return true;
     }
     return true;
+  };
+
+  const formatPhone = (value: string) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, '');
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 3) return phoneNumber;
+    if (phoneNumberLength < 7) {
+      return `(${phoneNumber.slice(0, 2)}) ${phoneNumber.slice(2)}`;
+    }
+    if (phoneNumberLength < 11) {
+      return `(${phoneNumber.slice(0, 2)}) ${phoneNumber.slice(2, 6)}-${phoneNumber.slice(6)}`;
+    }
+    return `(${phoneNumber.slice(0, 2)}) ${phoneNumber.slice(2, 7)}-${phoneNumber.slice(7, 11)}`;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatPhone(e.target.value);
+    setTutorPhone(formattedValue);
+  };
+
+  const handleCtaSubmit = async () => {
+    if (!chosenOption) return;
+    setSendingState('sending');
+    const allPlans = [...ADULT_PLANS, ...SENIOR_PLANS];
+    const selectedPlanData = allPlans.find(p => p.id === profile.selectedPlan);
+    const result = calculateNutrition(profile);
+    
+    // Retrieve selected kit name and prices
+    const kits = getKitsForStage(profile.age);
+    const currentKit = kits.find(k => k.id === selectedKitId) || kits[0];
+    const finalKitName = currentKit ? currentKit.name : 'Cardápio Personalizado';
+    const kitPrices = currentKit ? currentKit.priceFormula(result.dailyG) : null;
+
+    const payload = {
+      nome_pet: profile.name,
+      peso: profile.weight,
+      porte: profile.size || getSizeFromWeight(profile.weight),
+      faixa_etaria: profile.age,
+      nivel_atividade: profile.activityLevel,
+      alergias: profile.allergies,
+      proteina: selectedPlanData ? selectedPlanData.protein : '',
+      castrado: profile.isNeutered,
+      opcao: chosenOption,
+      nome_tutor: tutorName,
+      telefone: tutorPhone,
+      plano_recomandado: finalKitName,
+      plano_recomendado: finalKitName,
+      kcal_dia: result.dailyCal,
+      porção_dia: result.dailyG,
+      kg_mes: result.monthKg,
+      preco_kit: kitPrices ? kitPrices.discounted : 0
+    };
+
+    try {
+      const response = await fetch('https://webhook.shiftbrothers.com.br/webhook/forms_site_cozinhapet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setSendingState('success');
+      } else {
+        setSendingState('error');
+      }
+    } catch (error) {
+      console.error('Error sending form data:', error);
+      setSendingState('error');
+    }
   };
 
   const result = step === 4 ? calculateNutrition(profile) : null;
@@ -314,74 +553,224 @@ export const NutritionalCalculator: React.FC = () => {
 
             {step === 4 && result && (
               <div className="animate-fade-in">
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center gap-2 bg-brand-sageLight text-brand-sageDark px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-4"><Sparkles size={14} /> Plano Gerado</div>
-                  <h3 className="text-2xl md:text-3xl font-serif text-neutral-900">Plano de Vitalidade para <span className="text-brand-red italic">{profile.name}</span></h3>
-                </div>
+                {sendingState === 'success' ? (
+                  <div className="flex flex-col items-center justify-center py-10 text-center animate-fade-in">
+                    <svg className="checkmark-wrap" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                      <circle className="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                      <path className="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                    <h4 className="text-2xl font-serif text-neutral-900 mt-4 mb-2 font-bold">Enviado com sucesso!</h4>
+                    <p className="text-sm text-neutral-700 leading-relaxed max-w-md">
+                      As informações de <strong>{profile.name}</strong> foram recebidas. Nossa equipe entrará em contato com você pelo WhatsApp no número <strong>{tutorPhone}</strong> em instantes!
+                    </p>
+                  </div>
+                ) : showLeadForm ? (
+                  <div className="animate-fade-in">
+                    <div className="text-center mb-8">
+                      <div className="inline-flex items-center gap-2 bg-brand-blueLight text-brand-blue px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-4">
+                        <Sparkles size={14} /> Quase lá!
+                      </div>
+                      <h3 className="text-2xl md:text-3xl font-serif text-neutral-900">Salvar Plano de {profile.name}</h3>
+                      <p className="text-neutral-500 text-sm mt-1">Insira seus dados para receber o orçamento detalhado.</p>
+                    </div>
 
-                {/* Filhote - personalized order message */}
-                {isFilhote && (
-                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200/50 mb-6 shadow-sm">
-                    <div className="flex items-start gap-4">
-                      <span className="text-4xl">🐾</span>
-                      <div className="flex-1">
-                        <h5 className="text-lg font-serif text-neutral-900 font-bold mb-2">Cardápio Personalizado para Filhote</h5>
-                        <p className="text-sm text-neutral-600 leading-relaxed">Para filhotes, cada pedido é preparado de forma <strong>100% personalizada</strong> pelo nosso time de nutrição veterinária, respeitando as necessidades específicas de crescimento de <strong>{profile.name}</strong>.</p>
+                    <div className="space-y-5 mb-8">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Seu Nome</label>
+                        <input 
+                          type="text" 
+                          value={tutorName} 
+                          onChange={(e) => setTutorName(e.target.value)} 
+                          placeholder="Ex: Lucas Silva" 
+                          className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 text-base font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Seu WhatsApp</label>
+                        <input 
+                          type="tel" 
+                          value={tutorPhone} 
+                          onChange={handlePhoneChange} 
+                          placeholder="Ex: (11) 99999-9999" 
+                          className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 text-base font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all"
+                        />
                       </div>
                     </div>
-                  </div>
-                )}
 
-                {/* Recommended Plan Card - for adult/senior pets */}
-                {hasPlans && selectedPlanData && (
-                  <div className="bg-gradient-to-br from-brand-cream to-white rounded-2xl p-5 border border-brand-sage/20 mb-6 shadow-sm">
-                    <div className="flex items-center gap-2 mb-3">
-                      <UtensilsCrossed size={16} className="text-brand-sage" />
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-500">Plano Recomendado — {lineLabel}</h4>
+                    <div className="flex flex-col gap-3">
+                      <button 
+                        onClick={handleCtaSubmit}
+                        disabled={sendingState === 'sending' || tutorName.trim().length < 2 || tutorPhone.replace(/[^\d]/g, '').length < 10}
+                        className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {sendingState === 'sending' ? 'Enviando...' : 'Finalizar e Enviar'}
+                        {sendingState !== 'sending' && <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />}
+                      </button>
+                      
+                      <button 
+                        onClick={() => { setShowLeadForm(false); setSendingState('idle'); }}
+                        disabled={sendingState === 'sending'}
+                        className="w-full bg-transparent border border-neutral-200 text-neutral-600 py-3 rounded-2xl font-semibold text-sm hover:bg-neutral-50 transition-all text-center"
+                      >
+                        Voltar para o Plano
+                      </button>
                     </div>
-                    <div className="flex items-start gap-4">
-                      <span className="text-4xl">{selectedPlanData.emoji}</span>
-                      <div className="flex-1">
-                        <h5 className="text-lg font-serif text-neutral-900 font-bold mb-1">{selectedPlanData.name}</h5>
-                        <p className="text-xs text-neutral-500 leading-relaxed">{selectedPlanData.ingredients}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
-                <div className="grid grid-cols-3 gap-3 md:gap-4 mb-8">
-                  <div className="bg-white rounded-2xl p-4 text-center border border-neutral-100 shadow-sm"><div className="text-2xl md:text-3xl font-serif text-brand-blue">{result.dailyCal}</div><div className="text-[10px] md:text-xs text-neutral-500 mt-1">kcal/dia</div></div>
-                  <div className="bg-white rounded-2xl p-4 text-center border border-neutral-100 shadow-sm"><div className="text-2xl md:text-3xl font-serif text-brand-blue">{result.dailyG}g</div><div className="text-[10px] md:text-xs text-neutral-500 mt-1">porção/dia</div></div>
-                  <div className="bg-white rounded-2xl p-4 text-center border border-neutral-100 shadow-sm"><div className="text-2xl md:text-3xl font-serif text-brand-blue">{result.monthKg}kg</div><div className="text-[10px] md:text-xs text-neutral-500 mt-1">por mês</div></div>
-                </div>
-                <div className="bg-white rounded-2xl p-5 border border-neutral-100 mb-6">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-4 flex items-center gap-2"><Zap size={14} className="text-brand-sage" /> Nutrientes Prioritários</h4>
-                  <div className="space-y-3">{result.prios.map((p, i) => <div key={i} className="flex items-start gap-3"><CheckCircle2 size={16} className="text-brand-sage flex-shrink-0 mt-0.5" /><span className="text-sm text-neutral-700">{p}</span></div>)}</div>
-                </div>
-                <div className="bg-gradient-to-r from-brand-blueDark to-brand-blue rounded-2xl p-5 text-white mb-6">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-4 flex items-center gap-2"><Shield size={14} /> Economia Real</h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div><div className="text-white/50 text-[10px] uppercase tracking-wider mb-1">Ração + vet/mês</div><div className="text-xl font-serif line-through opacity-60">R$ {result.priceRac + result.vetSave}</div></div>
-                    <div><div className="text-brand-sageLight text-[10px] uppercase tracking-wider mb-1">Plano Cozinha Pet</div><div className="text-xl font-serif">R$ {result.priceCoz}</div></div>
+                    {sendingState === 'error' && (
+                      <p className="text-center text-xs text-brand-red font-semibold mt-2">
+                        Ocorreu um erro ao enviar. Por favor, tente novamente.
+                      </p>
+                    )}
                   </div>
-                </div>
-
-                {/* CTA Buttons */}
-                {isFilhote ? (
-                  <button className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98]" id="custom-plan-cta">
-                    <Sparkles size={20} /> Solicitar Cardápio Personalizado <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
                 ) : (
-                  <div className="flex flex-col gap-3">
-                    <button className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-2xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98] ring-2 ring-emerald-400/30 ring-offset-2" id="custom-plan-cta">
-                      <Sparkles size={20} /> Cardápio Personalizado <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                    </button>
-                    <button className="w-full bg-brand-red text-white py-4 rounded-2xl font-bold text-sm md:text-base hover:bg-brand-redDark transition-all shadow-lg hover:shadow-brand-red/20 flex items-center justify-center gap-3 group active:scale-[0.98]" id="activate-plan-cta">
-                      <Heart size={18} fill="white" /> Pedido a Pronta Entrega <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  </div>
+                  <>
+                    <div className="text-center mb-8">
+                      <div className="inline-flex items-center gap-2 bg-brand-sageLight text-brand-sageDark px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-4"><Sparkles size={14} /> Plano Gerado</div>
+                      <h3 className="text-2xl md:text-3xl font-serif text-neutral-900">Plano de Vitalidade para <span className="text-brand-red italic">{profile.name}</span></h3>
+                    </div>
+
+                    {/* Filhote - personalized order message */}
+                    {isFilhote && (
+                      <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200/50 mb-6 shadow-sm">
+                        <div className="flex items-start gap-4">
+                          <span className="text-4xl">🐾</span>
+                          <div className="flex-1">
+                            <h5 className="text-lg font-serif text-neutral-900 font-bold mb-2">Cardápio Personalizado para Filhote</h5>
+                            <p className="text-sm text-neutral-600 leading-relaxed">Para filhotes, cada pedido é preparado de forma <strong>100% personalizada</strong> pelo nosso time de nutrição veterinária, respeitando as necessidades específicas de crescimento de <strong>{profile.name}</strong>.</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Recommended Plan Card - for adult/senior pets */}
+                    {hasPlans && selectedPlanData && (
+                      <div className="bg-gradient-to-br from-brand-cream to-white rounded-2xl p-5 border border-brand-sage/20 mb-6 shadow-sm">
+                        <div className="flex items-center gap-2 mb-3">
+                          <UtensilsCrossed size={16} className="text-brand-sage" />
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-500">Plano Recomendado — {lineLabel}</h4>
+                        </div>
+                        <div className="flex items-start gap-4">
+                          <span className="text-4xl">{selectedPlanData.emoji}</span>
+                          <div className="flex-1">
+                            <h5 className="text-lg font-serif text-neutral-900 font-bold mb-1">{selectedPlanData.name}</h5>
+                            <p className="text-xs text-neutral-500 leading-relaxed">{selectedPlanData.ingredients}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-3 gap-3 md:gap-4 mb-8">
+                      <div className="bg-white rounded-2xl p-4 text-center border border-neutral-100 shadow-sm"><div className="text-2xl md:text-3xl font-serif text-brand-blue">{result.dailyCal}</div><div className="text-[10px] md:text-xs text-neutral-500 mt-1">kcal/dia</div></div>
+                      <div className="bg-white rounded-2xl p-4 text-center border border-neutral-100 shadow-sm"><div className="text-2xl md:text-3xl font-serif text-brand-blue">{result.dailyG}g</div><div className="text-[10px] md:text-xs text-neutral-500 mt-1">porção/dia</div></div>
+                      <div className="bg-white rounded-2xl p-4 text-center border border-neutral-100 shadow-sm"><div className="text-2xl md:text-3xl font-serif text-brand-blue">{result.monthKg}kg</div><div className="text-[10px] md:text-xs text-neutral-500 mt-1">por mês</div></div>
+                    </div>
+                    
+                    <div className="bg-white rounded-2xl p-5 border border-neutral-100 mb-6">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-4 flex items-center gap-2"><Zap size={14} className="text-brand-sage" /> Nutrientes Prioritários</h4>
+                      <div className="space-y-3">{result.prios.map((p, i) => <div key={i} className="flex items-start gap-3"><CheckCircle2 size={16} className="text-brand-sage flex-shrink-0 mt-0.5" /><span className="text-sm text-neutral-700">{p}</span></div>)}</div>
+                    </div>
+
+                    {/* Pre-budget Warning Note */}
+                    <div className="bg-brand-cream/80 border border-brand-earth/10 rounded-2xl p-4 text-neutral-700 text-xs mb-6 leading-relaxed flex gap-2.5 items-start">
+                      <span className="text-base flex-shrink-0">⚠️</span>
+                      <p>
+                        A porção corporal calculada é de <strong>{result.pct}%</strong> baseada no estilo de vida de <strong>{profile.name}</strong>. Os valores abaixo são um <strong>pré-orçamento estimado</strong> e podem variar conforme a disponibilidade de estoque.
+                      </p>
+                    </div>
+
+                    {/* Kits List Selection */}
+                    <div className="mb-6">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-3 flex items-center gap-2">
+                        📋 Escolha o Kit Mensal:
+                      </h4>
+                      <div className="space-y-3">
+                        {getKitsForStage(profile.age).map((kit) => {
+                          const prices = kit.priceFormula(result.dailyG);
+                          const isSelected = selectedKitId === kit.id;
+                          return (
+                            <div 
+                              key={kit.id} 
+                              onClick={() => setSelectedKitId(kit.id)}
+                              className={`cursor-pointer rounded-2xl p-4 border transition-all flex justify-between items-center ${
+                                isSelected 
+                                  ? 'border-brand-blue bg-brand-blueLight/30 shadow-md ring-1 ring-brand-blue/30' 
+                                  : 'border-neutral-200 bg-white hover:border-brand-blue/30'
+                              }`}
+                            >
+                              <div className="pr-2 text-left">
+                                <span className="font-bold text-sm text-neutral-850 block">{kit.name}</span>
+                                <span className="text-xs text-neutral-500 block mt-0.5">{kit.description}</span>
+                              </div>
+                              <div className="text-right flex-shrink-0">
+                                <span className="text-xs text-neutral-400 line-through block">R$ {prices.original}</span>
+                                <span className="text-sm md:text-base font-serif font-bold text-brand-blue block">
+                                  R$ {prices.discounted} 
+                                  <span className="ml-1 text-[9px] font-sans font-medium text-brand-sage uppercase bg-brand-sageLight px-1 py-0.5 rounded">10% OFF</span>
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Final Cost Comparison Card */}
+                    {(() => {
+                      const kits = getKitsForStage(profile.age);
+                      const currentKit = kits.find(k => k.id === selectedKitId) || kits[0];
+                      if (!currentKit) return null;
+                      const prices = currentKit.priceFormula(result.dailyG);
+                      return (
+                        <div className="bg-gradient-to-r from-brand-blueDark to-brand-blue rounded-2xl p-5 text-white mb-6 shadow-md animate-scale-in">
+                          <div className="flex justify-between items-center mb-3 border-b border-white/10 pb-3">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">Comparação Mensal</span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider bg-brand-red text-white px-2.5 py-0.5 rounded-full">{currentKit.name}</span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4 text-left">
+                            <div>
+                              <div className="text-white/50 text-[10px] uppercase tracking-wider mb-1">Ração + vet/mês</div>
+                              <div className="text-xl font-serif line-through opacity-60">R$ {result.priceRac + result.vetSave}</div>
+                            </div>
+                            <div>
+                              <div className="text-brand-sageLight text-[10px] uppercase tracking-wider mb-1">Cozinha Pet (10% OFF)</div>
+                              <div className="text-xl font-serif">R$ {prices.discounted}</div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    {/* CTA Buttons */}
+                    {isFilhote ? (
+                      <button 
+                        onClick={() => { setChosenOption('cardapio_personalizado'); setShowLeadForm(true); }}
+                        className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98]" 
+                        id="custom-plan-cta"
+                      >
+                        <Sparkles size={20} /> Solicitar Cardápio Personalizado <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        <button 
+                          onClick={() => { setChosenOption('cardapio_personalizado'); setShowLeadForm(true); }}
+                          className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-2xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98] ring-2 ring-emerald-400/30 ring-offset-2" 
+                          id="custom-plan-cta"
+                        >
+                          <Sparkles size={20} /> Cardápio Personalizado <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                        </button>
+                        <button 
+                          onClick={() => { setChosenOption('pronta_entrega'); setShowLeadForm(true); }}
+                          className="w-full bg-brand-red text-white py-4 rounded-2xl font-bold text-sm md:text-base hover:bg-brand-redDark transition-all shadow-lg hover:shadow-brand-red/20 flex items-center justify-center gap-3 group active:scale-[0.98]" 
+                          id="activate-plan-cta"
+                        >
+                          <Heart size={18} fill="white" /> Pedido a Pronta Entrega <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                        </button>
+                      </div>
+                    )}
+                    <p className="text-center text-xs text-neutral-400 mt-3">Garantia de 30 dias • Cancele quando quiser • Frete grátis no 1º pedido</p>
+                  </>
                 )}
-                <p className="text-center text-xs text-neutral-400 mt-3">Garantia de 30 dias • Cancele quando quiser • Frete grátis no 1º pedido</p>
               </div>
             )}
 
@@ -391,7 +780,7 @@ export const NutritionalCalculator: React.FC = () => {
                 <button onClick={() => canGo() && setStep((step + 1) as Step)} disabled={!canGo()} className={`flex items-center gap-2 px-8 py-3 rounded-full font-bold text-sm transition-all ${canGo() ? 'bg-brand-blue text-white hover:bg-brand-blueDark shadow-lg active:scale-95' : 'bg-neutral-100 text-neutral-300 cursor-not-allowed'}`} id="calc-next-btn">Continuar <ArrowRight size={16} /></button>
               </div>
             )}
-            {step === 4 && <div className="flex justify-center mt-6"><button onClick={() => { setStep(1); setProfile(initialProfile); }} className="text-neutral-400 hover:text-neutral-600 font-medium text-xs transition-colors underline underline-offset-4">Calcular para outro pet</button></div>}
+            {step === 4 && <div className="flex justify-center mt-6"><button onClick={() => { setStep(1); setProfile(initialProfile); setSendingState('idle'); setTutorName(''); setTutorPhone(''); setChosenOption(null); setShowLeadForm(false); setSelectedKitId(''); }} className="text-neutral-400 hover:text-neutral-600 font-medium text-xs transition-colors underline underline-offset-4">Calcular para outro pet</button></div>}
           </div>
         </div>
       </div>
