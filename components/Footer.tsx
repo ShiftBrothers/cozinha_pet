@@ -55,7 +55,6 @@ export const Footer: React.FC = () => {
             <ul className="space-y-4 text-sm font-medium text-neutral-400">
               <li><a href="#calculadora" className="hover:text-white transition-colors">Calculadora Nutricional</a></li>
               <li><a href="#planos" className="hover:text-white transition-colors">Planos de Assinatura</a></li>
-              <li><a href="#resultados" className="hover:text-white transition-colors">Resultados Reais</a></li>
             </ul>
           </div>
 

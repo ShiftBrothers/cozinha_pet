@@ -112,7 +112,7 @@ const ACTIVITY_OPTIONS = [
   { label: 'Muito Ativo', desc: 'Trabalho, competição', value: 'very_active' },
 ];
 
-function getBodyPercent(ageGroup: string, activity: string, weight: number): number {
+function getBodyPercent(ageGroup: string, activity: string, weight: number, isNeutered: boolean): number {
   const isFilhote = ageGroup.includes('Filhote');
   const isSenior = ageGroup.includes('Senior');
   const isAdult = ageGroup.includes('Adulto');
@@ -145,7 +145,11 @@ function getBodyPercent(ageGroup: string, activity: string, weight: number): num
     }
   }
 
-  return pct;
+  if (isNeutered) {
+    pct = pct * 0.9;
+  }
+
+  return Math.round(pct * 100) / 100;
 }
 
 interface KitOption {
@@ -265,7 +269,7 @@ const getKitsForStage = (ageGroup: string): KitOption[] => {
 };
 
 function calculateNutrition(p: PetProfile) {
-  const pct = getBodyPercent(p.age, p.activityLevel, p.weight);
+  const pct = getBodyPercent(p.age, p.activityLevel, p.weight, p.isNeutered);
   const dailyG = Math.round(pct * p.weight * 10);
   const monthKg = Math.round((dailyG * 30) / 1000 * 10) / 10;
   

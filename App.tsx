@@ -5,7 +5,6 @@ import { Hero } from './components/Hero';
 import { SocialProof } from './components/SocialProof';
 import { NutritionalCalculator } from './components/NutritionalCalculator';
 import { PricingComparison } from './components/PricingComparison';
-import { BeforeAfter } from './components/BeforeAfter';
 import { Testimonials } from './components/Testimonials';
 import { KnowledgePills } from './components/KnowledgePills';
 import { Footer } from './components/Footer';
@@ -20,7 +19,6 @@ const App: React.FC = () => {
         <SocialProof />
         <NutritionalCalculator />
         <PricingComparison />
-        <BeforeAfter />
         <Testimonials />
         <KnowledgePills />
         
