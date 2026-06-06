@@ -126,9 +126,6 @@ export const Hero: React.FC = () => {
               Descobrir o Plano do Meu Pet
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="#metodologia" className="bg-white text-neutral-800 border border-neutral-200 px-8 md:px-10 py-4 md:py-5 rounded-full font-semibold hover:bg-brand-blueLight transition-all text-center shadow-sm active:scale-95 text-sm md:text-base">
-              Como funciona
-            </a>
           </div>
 
           <div className="mt-10 md:mt-12 flex flex-col sm:flex-row items-center gap-4 text-xs md:text-sm text-neutral-800/55 justify-center md:justify-start">

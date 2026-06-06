@@ -30,7 +30,72 @@ export const Testimonials: React.FC = () => {
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          {/* Dra. Carol Cattani - Featured Spotlight */}
+          <div className="bg-gradient-to-br from-brand-cream/80 to-white rounded-3xl p-8 md:p-10 border border-neutral-200/60 shadow-xl flex flex-col justify-between hover:shadow-2xl transition-all duration-300 relative overflow-hidden group">
+            {/* Visual glow on card hover */}
+            <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-brand-sage/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform duration-500"></div>
+            
+            <div>
+              {/* Photo Area */}
+              <div className="relative mb-8 text-center">
+                <a 
+                  href="https://www.instagram.com/vetcarolcattani?igsh=MXJsMXpxaDUzOHJ2aA%3D%3D" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="relative block w-44 h-44 md:w-52 md:h-52 mx-auto rounded-full overflow-hidden border-4 border-brand-sageLight hover:border-brand-sage shadow-2xl transition-all duration-300 active:scale-95 group/photo"
+                  title="Ver Instagram da Dra. Carol"
+                >
+                  <img 
+                    src="/carol_cattani.jpg" 
+                    alt="Dra. Carol Cattani" 
+                    className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500" 
+                  />
+                  <div className="absolute inset-0 bg-neutral-900/40 opacity-0 group-hover/photo:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                    <div className="text-white text-center">
+                      <Instagram size={24} className="mx-auto mb-1 animate-bounce" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider">Ver Instagram</span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              {/* Info */}
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <h3 className="text-2xl font-bold text-neutral-900">Dra. Carol Cattani</h3>
+                  <BadgeCheck size={20} className="text-brand-blue" />
+                </div>
+                <p className="text-brand-sageDark font-semibold text-sm mb-1">Médica Veterinária & Nutricionista Parceira</p>
+                <p className="text-xs text-neutral-400 font-mono mb-6">CRMV-PR 11.458</p>
+                
+                <p className="text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto mb-6">
+                  "Especialista em fisiatria, acupuntura e fitoterapia veterinária. Atua no desenvolvimento e validação técnica das receitas da Cozinha Pet, garantindo a sinergia perfeita entre ingredientes funcionais e terapias naturais para promover o bem-estar e a longevidade ativa do seu pet."
+                </p>
+              </div>
+
+              {/* Specialties */}
+              <div className="flex flex-wrap justify-center gap-2 mb-8">
+                {['Fisiatria & Reabilitação', 'Acupuntura Vet', 'Terapias Naturais'].map((spec) => (
+                  <span key={spec} className="bg-white border border-brand-sage/20 text-brand-sageDark px-4 py-1.5 rounded-full text-xs font-semibold">
+                    {spec}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center mt-auto">
+              <a 
+                href="https://www.instagram.com/vetcarolcattani?igsh=MXJsMXpxaDUzOHJ2aA%3D%3D" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-2 bg-brand-sage text-white hover:bg-brand-sageDark px-8 py-3.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-brand-sage/20 active:scale-95"
+              >
+                <Instagram size={18} /> Acompanhar no Instagram
+              </a>
+            </div>
+          </div>
+
           {/* Dra. Daniela Facanali - Featured Spotlight */}
           <div className="bg-gradient-to-br from-brand-cream/80 to-white rounded-3xl p-8 md:p-10 border border-neutral-200/60 shadow-xl flex flex-col justify-between hover:shadow-2xl transition-all duration-300 relative overflow-hidden group">
             {/* Visual glow on card hover */}

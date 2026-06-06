@@ -4,7 +4,6 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { SocialProof } from './components/SocialProof';
 import { NutritionalCalculator } from './components/NutritionalCalculator';
-import { BentoGrid } from './components/BentoGrid';
 import { PricingComparison } from './components/PricingComparison';
 import { BeforeAfter } from './components/BeforeAfter';
 import { Testimonials } from './components/Testimonials';
@@ -20,7 +19,6 @@ const App: React.FC = () => {
         <Hero />
         <SocialProof />
         <NutritionalCalculator />
-        <BentoGrid />
         <PricingComparison />
         <BeforeAfter />
         <Testimonials />
