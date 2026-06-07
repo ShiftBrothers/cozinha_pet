@@ -293,17 +293,36 @@ function calculateNutrition(p: PetProfile) {
 
 const initialProfile: PetProfile = { name: '', species: 'dog', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: '', selectedPlan: '' };
 
-export const NutritionalCalculator: React.FC = () => {
+interface NutritionalCalculatorProps {
+  degustationKit?: 'kit_degust_150' | 'kit_degust_250' | null;
+  clearDegustationKit?: () => void;
+}
+
+export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
+  degustationKit,
+  clearDegustationKit
+}) => {
   const [step, setStep] = useState<Step>(1);
   const [profile, setProfile] = useState<PetProfile>(initialProfile);
   const [isVisible, setIsVisible] = useState(false);
   const [sendingState, setSendingState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [tutorName, setTutorName] = useState('');
   const [tutorPhone, setTutorPhone] = useState('');
-  const [chosenOption, setChosenOption] = useState<'cardapio_personalizado' | 'pronta_entrega' | null>(null);
+  const [chosenOption, setChosenOption] = useState<'cardapio_personalizado' | 'pronta_entrega' | 'kit_degust_150' | 'kit_degust_250' | null>(null);
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [selectedKitId, setSelectedKitId] = useState<string>('');
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (degustationKit) {
+      setStep(4);
+      setChosenOption(degustationKit);
+      setShowLeadForm(true);
+      if (clearDegustationKit) {
+        clearDegustationKit();
+      }
+    }
+  }, [degustationKit, clearDegustationKit]);
 
   // Auto-select first kit on entering step 4
   useEffect(() => {
@@ -380,27 +399,39 @@ export const NutritionalCalculator: React.FC = () => {
     // Retrieve selected kit name and prices
     const kits = getKitsForStage(profile.age);
     const currentKit = kits.find(k => k.id === selectedKitId) || kits[0];
-    const finalKitName = currentKit ? currentKit.name : 'Cardápio Personalizado';
+    
+    const isDegust = chosenOption.startsWith('kit_degust_');
+    const finalKitName = chosenOption === 'kit_degust_150' 
+      ? 'Kit Degustação 150g' 
+      : chosenOption === 'kit_degust_250' 
+      ? 'Kit Degustação 250g' 
+      : (currentKit ? currentKit.name : 'Cardápio Personalizado');
+
     const kitPrices = currentKit ? currentKit.priceFormula(result.dailyG) : null;
+    const finalPrice = chosenOption === 'kit_degust_150' 
+      ? 40 
+      : chosenOption === 'kit_degust_250' 
+      ? 60 
+      : (kitPrices ? kitPrices.discounted : 0);
 
     const payload = {
-      nome_pet: profile.name,
-      peso: profile.weight,
-      porte: profile.size || getSizeFromWeight(profile.weight),
-      faixa_etaria: profile.age,
-      nivel_atividade: profile.activityLevel,
-      alergias: profile.allergies,
-      proteina: selectedPlanData ? selectedPlanData.protein : '',
-      castrado: profile.isNeutered,
+      nome_pet: isDegust ? 'Degustação' : (profile.name || 'Sem nome'),
+      peso: isDegust ? 0 : profile.weight,
+      porte: isDegust ? 'N/A' : (profile.size || getSizeFromWeight(profile.weight)),
+      faixa_etaria: isDegust ? 'N/A' : (profile.age || 'N/A'),
+      nivel_atividade: isDegust ? 'N/A' : (profile.activityLevel || 'N/A'),
+      alergias: isDegust ? 'N/A' : (profile.allergies || 'N/A'),
+      proteina: isDegust ? 'N/A' : (selectedPlanData ? selectedPlanData.protein : ''),
+      castrado: isDegust ? false : profile.isNeutered,
       opcao: chosenOption,
       nome_tutor: tutorName,
       telefone: tutorPhone,
       plano_recomandado: finalKitName,
       plano_recomendado: finalKitName,
-      kcal_dia: result.dailyCal,
-      porção_dia: result.dailyG,
-      kg_mes: result.monthKg,
-      preco_kit: kitPrices ? kitPrices.discounted : 0
+      kcal_dia: isDegust ? 0 : result.dailyCal,
+      porção_dia: isDegust ? 0 : result.dailyG,
+      kg_mes: isDegust ? 0 : result.monthKg,
+      preco_kit: finalPrice
     };
 
     try {
@@ -565,7 +596,15 @@ export const NutritionalCalculator: React.FC = () => {
                     </svg>
                     <h4 className="text-2xl font-serif text-neutral-900 mt-4 mb-2 font-bold">Enviado com sucesso!</h4>
                     <p className="text-sm text-neutral-700 leading-relaxed max-w-md">
-                      As informações de <strong>{profile.name}</strong> foram recebidas. Nossa equipe entrará em contato com você pelo WhatsApp no número <strong>{tutorPhone}</strong> em instantes!
+                      {chosenOption?.startsWith('kit_degust_') ? (
+                        <>
+                          Seu pedido para o <strong>{chosenOption === 'kit_degust_150' ? 'Kit Degustação 150g' : 'Kit Degustação 250g'}</strong> foi recebido! Nossa equipe entrará em contato com você pelo WhatsApp no número <strong>{tutorPhone}</strong> em instantes.
+                        </>
+                      ) : (
+                        <>
+                          As informações de <strong>{profile.name}</strong> foram recebidas. Nossa equipe entrará em contato com você pelo WhatsApp no número <strong>{tutorPhone}</strong> em instantes!
+                        </>
+                      )}
                     </p>
                   </div>
                 ) : showLeadForm ? (
@@ -574,8 +613,16 @@ export const NutritionalCalculator: React.FC = () => {
                       <div className="inline-flex items-center gap-2 bg-brand-blueLight text-brand-blue px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-4">
                         <Sparkles size={14} /> Quase lá!
                       </div>
-                      <h3 className="text-2xl md:text-3xl font-serif text-neutral-900">Salvar Plano de {profile.name}</h3>
-                      <p className="text-neutral-500 text-sm mt-1">Insira seus dados para receber o orçamento detalhado.</p>
+                      <h3 className="text-2xl md:text-3xl font-serif text-neutral-900">
+                        {chosenOption?.startsWith('kit_degust_')
+                          ? `Pedir ${chosenOption === 'kit_degust_150' ? 'Kit Degustação 150g' : 'Kit Degustação 250g'}`
+                          : `Salvar Plano de ${profile.name}`}
+                      </h3>
+                      <p className="text-neutral-500 text-sm mt-1">
+                        {chosenOption?.startsWith('kit_degust_')
+                          ? 'Insira seus dados para receber as instruções de pagamento e entrega.'
+                          : 'Insira seus dados para receber o orçamento detalhado.'}
+                      </p>
                     </div>
 
                     <div className="space-y-5 mb-8">
@@ -613,11 +660,18 @@ export const NutritionalCalculator: React.FC = () => {
                       </button>
                       
                       <button 
-                        onClick={() => { setShowLeadForm(false); setSendingState('idle'); }}
+                        onClick={() => { 
+                          setShowLeadForm(false); 
+                          setSendingState('idle'); 
+                          if (chosenOption?.startsWith('kit_degust_')) {
+                            setStep(1);
+                            setChosenOption(null);
+                          }
+                        }}
                         disabled={sendingState === 'sending'}
                         className="w-full bg-transparent border border-neutral-200 text-neutral-600 py-3 rounded-2xl font-semibold text-sm hover:bg-neutral-50 transition-all text-center"
                       >
-                        Voltar para o Plano
+                        {chosenOption?.startsWith('kit_degust_') ? 'Voltar ao Início' : 'Voltar para o Plano'}
                       </button>
                     </div>
 
@@ -718,32 +772,6 @@ export const NutritionalCalculator: React.FC = () => {
                         })}
                       </div>
                     </div>
-
-                    {/* Final Cost Comparison Card */}
-                    {(() => {
-                      const kits = getKitsForStage(profile.age);
-                      const currentKit = kits.find(k => k.id === selectedKitId) || kits[0];
-                      if (!currentKit) return null;
-                      const prices = currentKit.priceFormula(result.dailyG);
-                      return (
-                        <div className="bg-gradient-to-r from-brand-blueDark to-brand-blue rounded-2xl p-5 text-white mb-6 shadow-md animate-scale-in">
-                          <div className="flex justify-between items-center mb-3 border-b border-white/10 pb-3">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">Comparação Mensal</span>
-                            <span className="text-[10px] font-bold uppercase tracking-wider bg-brand-red text-white px-2.5 py-0.5 rounded-full">{currentKit.name}</span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-4 text-left">
-                            <div>
-                              <div className="text-white/50 text-[10px] uppercase tracking-wider mb-1">Ração + vet/mês</div>
-                              <div className="text-xl font-serif line-through opacity-60">R$ {result.priceRac + result.vetSave}</div>
-                            </div>
-                            <div>
-                              <div className="text-brand-sageLight text-[10px] uppercase tracking-wider mb-1">Cozinha Pet (10% OFF)</div>
-                              <div className="text-xl font-serif">R$ {prices.discounted}</div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })()}
 
                     {/* CTA Buttons */}
                     {isFilhote ? (

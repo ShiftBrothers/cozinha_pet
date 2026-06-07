@@ -11,14 +11,16 @@ import { Footer } from './components/Footer';
 import { ArrowRight, Shield, RotateCcw, Truck } from 'lucide-react';
 
 const App: React.FC = () => {
+  const [degustationKit, setDegustationKit] = React.useState<'kit_degust_150' | 'kit_degust_250' | null>(null);
+
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-brand-blue selection:text-white">
       <Navbar />
       <main className="flex-grow">
         <Hero />
         <SocialProof />
-        <NutritionalCalculator />
-        <PricingComparison />
+        <NutritionalCalculator degustationKit={degustationKit} clearDegustationKit={() => setDegustationKit(null)} />
+        <PricingComparison onSelectKit={(kit) => setDegustationKit(kit)} />
         <Testimonials />
         <KnowledgePills />
         

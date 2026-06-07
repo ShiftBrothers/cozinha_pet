@@ -13,35 +13,46 @@ const comparisonData = [
 
 const plans = [
   {
-    name: 'Essencial',
-    price: 'R$ 189',
-    period: '/mês',
-    desc: 'Ideal para começar a transição alimentar',
-    features: ['1 proteína principal', 'Porções diárias calculadas', 'Entrega mensal programada', 'Suporte por email'],
+    name: 'Kit Degustação 150g',
+    price: 'R$ 40,00',
+    period: '/kit',
+    desc: 'Porções ideais para cães de pequeno porte.',
+    features: [
+      'Contém 4 porções de 150g',
+      'Mr. Músculo (bovino)',
+      'Frangolino (frango)',
+      'Baby o Porquinho (suíno)',
+      'Procurando Nemo (peixe)',
+      'Ingredientes 100% grau humano',
+      'Livre de conservantes artificiais'
+    ],
     highlighted: false,
-    cta: 'Começar Agora'
+    cta: 'Experimentar Kit 150g'
   },
   {
-    name: 'Vitalidade',
-    price: 'R$ 289',
-    period: '/mês',
-    desc: 'Nosso plano mais popular — nutrição completa',
-    features: ['Multi-proteína rotacional', 'Plano de Vitalidade personalizado', 'Acompanhamento nutricional mensal', 'Entrega quinzenal refrigerada', 'Suporte WhatsApp prioritário'],
+    name: 'Kit Degustação 250g',
+    price: 'R$ 60,00',
+    period: '/kit',
+    desc: 'Porções ideais para cães de médio e grande porte.',
+    features: [
+      'Contém 4 porções de 250g',
+      'Mr. Músculo (bovino)',
+      'Frangolino (frango)',
+      'Baby o Porquinho (suíno)',
+      'Procurando Nemo (peixe)',
+      'Ingredientes 100% grau humano',
+      'Livre de conservantes artificiais'
+    ],
     highlighted: true,
-    cta: 'Escolher Vitalidade'
-  },
-  {
-    name: 'Premium',
-    price: 'R$ 449',
-    period: '/mês',
-    desc: 'Formulação 100% individual + dedicação total',
-    features: ['Fórmula exclusiva para seu pet', 'Nutrólogo veterinário dedicado', 'Consulta mensal por vídeo', 'Entrega semanal ultra-fresca', 'Exames periódicos inclusos'],
-    highlighted: false,
-    cta: 'Ir para Premium'
+    cta: 'Experimentar Kit 250g'
   }
 ];
 
-export const PricingComparison: React.FC = () => {
+interface PricingComparisonProps {
+  onSelectKit: (kit: 'kit_degust_150' | 'kit_degust_250') => void;
+}
+
+export const PricingComparison: React.FC<PricingComparisonProps> = ({ onSelectKit }) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -111,14 +122,14 @@ export const PricingComparison: React.FC = () => {
         {/* Pricing Cards */}
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-neutral-900 mb-4 leading-tight">
-            Escolha o plano de <span className="italic text-brand-red">vitalidade</span>
+            Conheça nosso <span className="italic text-brand-red">kit degustação</span>
           </h2>
-          <p className="text-neutral-500 text-base md:text-lg max-w-xl mx-auto">
-            Todos os planos incluem ingredientes 100% grau humano, fórmulas validadas por nutrólogos e entrega refrigerada.
+          <p className="text-neutral-500 text-base md:text-lg max-w-2xl mx-auto">
+            O jeito mais fácil de descobrir os sabores favoritos do seu pet. Disponível em dois tamanhos.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {plans.map((plan, i) => (
             <div key={i} className={`relative rounded-3xl p-6 md:p-8 flex flex-col transition-all duration-300 hover:-translate-y-2 ${
               plan.highlighted 
@@ -146,20 +157,20 @@ export const PricingComparison: React.FC = () => {
                   </div>
                 ))}
               </div>
-              <button className={`w-full py-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 group active:scale-95 ${
+              <a href="#calculadora" className={`w-full py-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 group active:scale-95 ${
                 plan.highlighted 
                   ? 'bg-brand-red text-white hover:bg-brand-redDark shadow-lg' 
                   : 'bg-neutral-900 text-white hover:bg-neutral-800'
-              }`} id={`plan-${plan.name.toLowerCase()}-cta`}>
+              }`} id={`plan-${plan.name.toLowerCase().replace(/\s+/g, '-')}-cta`} onClick={() => onSelectKit(plan.name.includes('150g') ? 'kit_degust_150' : 'kit_degust_250')}>
                 {plan.cta}
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </button>
+              </a>
             </div>
           ))}
         </div>
 
         <p className="text-center text-xs text-neutral-400 mt-8 max-w-lg mx-auto">
-          Todos os planos são sem fidelidade. Cancele, pause ou altere a qualquer momento. Garantia incondicional de 30 dias.
+          Garantia incondicional de satisfação. Se o seu pet não gostar, nós devolvemos o valor do kit.
         </p>
       </div>
     </section>
