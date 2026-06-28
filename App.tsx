@@ -8,7 +8,7 @@ import { PricingComparison } from './components/PricingComparison';
 import { Testimonials } from './components/Testimonials';
 import { KnowledgePills } from './components/KnowledgePills';
 import { Footer } from './components/Footer';
-import { ArrowRight, Shield, RotateCcw, Truck } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const App: React.FC = () => {
   const [degustationKit, setDegustationKit] = React.useState<'kit_degust_150' | 'kit_degust_250' | null>(null);
@@ -37,22 +37,6 @@ const App: React.FC = () => {
             <p className="text-neutral-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-light">
               Cada dia com ração industrial é um dia a menos ao lado dele. Junte-se a milhares de tutores que escolheram investir em longevidade.
             </p>
-
-            {/* Trust Badges */}
-            <div className="flex flex-wrap justify-center gap-6 md:gap-8 mb-10">
-              <div className="flex items-center gap-2 text-neutral-400 text-xs font-medium">
-                <Shield size={16} className="text-brand-sage" />
-                Garantia 30 dias
-              </div>
-              <div className="flex items-center gap-2 text-neutral-400 text-xs font-medium">
-                <RotateCcw size={16} className="text-brand-sage" />
-                Cancele quando quiser
-              </div>
-              <div className="flex items-center gap-2 text-neutral-400 text-xs font-medium">
-                <Truck size={16} className="text-brand-sage" />
-                Frete grátis no 1º pedido
-              </div>
-            </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a href="#calculadora" className="bg-brand-red text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-brand-redDark transition-all shadow-2xl hover:shadow-brand-red/30 transform hover:-translate-y-1 active:scale-95 w-full sm:w-auto flex items-center justify-center gap-3 group">

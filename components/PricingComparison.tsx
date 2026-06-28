@@ -7,7 +7,7 @@ const comparisonData = [
   { criteria: 'Conservantes', industrial: 'BHA/BHT (potencial carcinogênico)', cozinha: '100% Livre de Conservantes artificiais', highlight: true },
   { criteria: 'Digestibilidade', industrial: '~65%', cozinha: '~95%', highlight: false },
   { criteria: 'Proteína', industrial: 'Baixa biodisponibilidade', cozinha: 'Alta biodisponibilidade + colágeno', highlight: false },
-  { criteria: 'Gasto vet médio/ano', industrial: 'R$ 2.800+ (doenças crônicas)', cozinha: 'R$ 800 (apenas preventivo)', highlight: true },
+  { criteria: 'Gasto vet médio/ano', industrial: 'R$ 2.800+ (doenças crônicas)', cozinha: '~R$ 500 (apenas preventivo)', highlight: true },
   { criteria: 'Expectativa de vida', industrial: 'Baseline', cozinha: '+20-30% (estudos AN)', highlight: true },
 ];
 
@@ -65,9 +65,9 @@ export const PricingComparison: React.FC<PricingComparisonProps> = ({ onSelectKi
   return (
     <section id="planos" className="py-20 md:py-32 bg-white relative overflow-hidden">
       <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-brand-red/3 rounded-full blur-[150px] -translate-y-1/2 -translate-x-1/4"></div>
-      
+
       <div ref={ref} className={`max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-        
+
         {/* Comparison Table */}
         <div className="mb-20 md:mb-28">
           <div className="text-center mb-12 md:mb-16">
@@ -112,7 +112,7 @@ export const PricingComparison: React.FC<PricingComparisonProps> = ({ onSelectKi
                 <span className="text-[10px] text-neutral-400 mt-0.5">ração + veterinário</span>
               </div>
               <div className="p-5 md:p-6 text-center flex flex-col items-center justify-center">
-                <span className="text-lg md:text-xl font-serif text-brand-sageLight">A partir de R$ 189</span>
+                <span className="text-lg md:text-xl font-serif text-brand-sageLight">A partir de R$ 40</span>
                 <span className="text-[10px] text-neutral-400 mt-0.5">tudo incluso</span>
               </div>
             </div>
@@ -131,11 +131,10 @@ export const PricingComparison: React.FC<PricingComparisonProps> = ({ onSelectKi
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {plans.map((plan, i) => (
-            <div key={i} className={`relative rounded-3xl p-6 md:p-8 flex flex-col transition-all duration-300 hover:-translate-y-2 ${
-              plan.highlighted 
-                ? 'bg-neutral-900 text-white shadow-2xl shadow-neutral-900/20 ring-2 ring-brand-red/30 scale-[1.02] md:scale-105' 
+            <div key={i} className={`relative rounded-3xl p-6 md:p-8 flex flex-col transition-all duration-300 hover:-translate-y-2 ${plan.highlighted
+                ? 'bg-neutral-900 text-white shadow-2xl shadow-neutral-900/20 ring-2 ring-brand-red/30 scale-[1.02] md:scale-105'
                 : 'bg-white border border-neutral-200 hover:shadow-xl'
-            }`}>
+              }`}>
               {plan.highlighted && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-red text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
                   <Star size={12} fill="white" /> Mais Popular
@@ -157,11 +156,10 @@ export const PricingComparison: React.FC<PricingComparisonProps> = ({ onSelectKi
                   </div>
                 ))}
               </div>
-              <a href="#calculadora" className={`w-full py-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 group active:scale-95 ${
-                plan.highlighted 
-                  ? 'bg-brand-red text-white hover:bg-brand-redDark shadow-lg' 
+              <a href="#calculadora" className={`w-full py-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 group active:scale-95 ${plan.highlighted
+                  ? 'bg-brand-red text-white hover:bg-brand-redDark shadow-lg'
                   : 'bg-neutral-900 text-white hover:bg-neutral-800'
-              }`} id={`plan-${plan.name.toLowerCase().replace(/\s+/g, '-')}-cta`} onClick={() => onSelectKit(plan.name.includes('150g') ? 'kit_degust_150' : 'kit_degust_250')}>
+                }`} id={`plan-${plan.name.toLowerCase().replace(/\s+/g, '-')}-cta`} onClick={() => onSelectKit(plan.name.includes('150g') ? 'kit_degust_150' : 'kit_degust_250')}>
                 {plan.cta}
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </a>

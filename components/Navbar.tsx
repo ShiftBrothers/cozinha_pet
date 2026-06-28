@@ -42,11 +42,10 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
-          ? 'bg-white/95 backdrop-blur-lg shadow-sm py-2 md:py-3'
-          : 'bg-transparent py-4 md:py-6'
-      }`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+        ? 'bg-white/95 backdrop-blur-lg shadow-sm py-2 md:py-3'
+        : 'bg-transparent py-4 md:py-6'
+        }`}>
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center group cursor-pointer">
             <a href="#hero">
@@ -75,11 +74,10 @@ export const Navbar: React.FC = () => {
           <div className="md:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`p-2 rounded-full transition-all duration-300 active:scale-90 ${
-                isScrolled || mobileMenuOpen
-                  ? 'text-neutral-800 hover:bg-neutral-100'
-                  : 'text-neutral-900 bg-white/85 backdrop-blur-sm shadow-sm hover:bg-white'
-              }`}
+              className={`p-2 rounded-full transition-all duration-300 active:scale-90 ${isScrolled || mobileMenuOpen
+                ? 'text-neutral-800 hover:bg-neutral-100'
+                : 'text-neutral-900 bg-white/85 backdrop-blur-sm shadow-sm hover:bg-white'
+                }`}
               aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
             >
               <Menu size={24} className={`transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 scale-75' : 'opacity-100 scale-100'}`} />
@@ -90,25 +88,22 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Menu — rendered as a sibling to nav, fully independent of nav's opacity/bg */}
       <div
-        className={`fixed inset-0 z-[70] md:hidden transition-all duration-400 ${
-          mobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
-        }`}
+        className={`fixed inset-0 z-[70] md:hidden transition-all duration-400 ${mobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
+          }`}
         aria-hidden={!mobileMenuOpen}
         aria-modal={mobileMenuOpen}
         role="dialog"
       >
         {/* Dark scrim backdrop */}
         <div
-          className={`absolute inset-0 bg-neutral-900/40 backdrop-blur-sm transition-opacity duration-400 ${
-            mobileMenuOpen ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`absolute inset-0 bg-neutral-900/40 backdrop-blur-sm transition-opacity duration-400 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'
+            }`}
           onClick={() => setMobileMenuOpen(false)}
         />
 
         {/* Drawer panel — slides in from the right */}
-        <div className={`absolute top-0 right-0 h-full w-[85vw] max-w-xs bg-white flex flex-col shadow-2xl transition-transform duration-500 ease-in-out ${
-          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}>
+        <div className={`absolute top-0 right-0 h-full w-[85vw] max-w-xs bg-white flex flex-col shadow-2xl transition-transform duration-500 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}>
           {/* Drawer header */}
           <div className="flex justify-between items-center p-6 border-b border-neutral-100">
             <Logo className="h-9" />
@@ -127,9 +122,8 @@ export const Navbar: React.FC = () => {
               <a
                 key={link.id}
                 href={link.href}
-                className={`text-xl font-serif text-neutral-800 py-4 border-b border-neutral-100 flex items-center justify-between transition-all duration-300 hover:text-brand-red group ${
-                  activeSection === link.id ? 'text-brand-red' : ''
-                }`}
+                className={`text-xl font-serif text-neutral-800 py-4 border-b border-neutral-100 flex items-center justify-between transition-all duration-300 hover:text-brand-red group ${activeSection === link.id ? 'text-brand-red' : ''
+                  }`}
                 style={{
                   transitionDelay: mobileMenuOpen ? `${80 + i * 50}ms` : '0ms',
                   opacity: mobileMenuOpen ? 1 : 0,
@@ -153,7 +147,7 @@ export const Navbar: React.FC = () => {
               Descobrir Meu Plano
             </a>
             <p className="text-center mt-4 text-neutral-400 font-semibold uppercase text-[9px] tracking-widest">
-              Fale conosco: (11) 99999-9999
+              Fale conosco: (41) 98875-2887
             </p>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { Award, BadgeCheck, Instagram, CheckCircle2 } from 'lucide-react';
 
 export const Testimonials: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,21 +36,21 @@ export const Testimonials: React.FC = () => {
           <div className="bg-gradient-to-br from-brand-cream/80 to-white rounded-3xl p-8 md:p-10 border border-neutral-200/60 shadow-xl flex flex-col justify-between hover:shadow-2xl transition-all duration-300 relative overflow-hidden group">
             {/* Visual glow on card hover */}
             <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-brand-sage/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform duration-500"></div>
-            
+
             <div>
               {/* Photo Area */}
               <div className="relative mb-8 text-center">
-                <a 
-                  href="https://www.instagram.com/vetcarolcattani?igsh=MXJsMXpxaDUzOHJ2aA%3D%3D" 
-                  target="_blank" 
+                <a
+                  href="https://www.instagram.com/vetcarolcattani?igsh=MXJsMXpxaDUzOHJ2aA%3D%3D"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="relative block w-44 h-44 md:w-52 md:h-52 mx-auto rounded-full overflow-hidden border-4 border-brand-sageLight hover:border-brand-sage shadow-2xl transition-all duration-300 active:scale-95 group/photo"
                   title="Ver Instagram da Dra. Carol"
                 >
-                  <img 
-                    src="/carol_cattani.jpg" 
-                    alt="Dra. Carol Cattani" 
-                    className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500" 
+                  <img
+                    src="/carol_cattani.jpg"
+                    alt="Dra. Carol Cattani"
+                    className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-neutral-900/40 opacity-0 group-hover/photo:opacity-100 flex items-center justify-center transition-opacity duration-300">
                     <div className="text-white text-center">
@@ -68,10 +69,33 @@ export const Testimonials: React.FC = () => {
                 </div>
                 <p className="text-brand-sageDark font-semibold text-sm mb-1">Médica Veterinária & Nutricionista Parceira</p>
                 <p className="text-xs text-neutral-400 font-mono mb-6">CRMV-PR 11.458</p>
-                
-                <p className="text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto mb-6">
-                  "Especialista em fisiatria, acupuntura e fitoterapia veterinária. Atua no desenvolvimento e validação técnica das receitas da Cozinha Pet, garantindo a sinergia perfeita entre ingredientes funcionais e terapias naturais para promover o bem-estar e a longevidade ativa do seu pet."
-                </p>
+
+                <div className="relative overflow-hidden mb-6">
+                  <p
+                    className={`text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto transition-all duration-500 ${
+                      showFeedback ? 'opacity-0 absolute inset-0 pointer-events-none' : 'opacity-100 relative'
+                    }`}
+                  >
+                    "Dedicada à nutrição clínica de cães, atuo na elaboração de planos alimentares individualizados que promovem saúde, qualidade de vida e longevidade. Meu trabalho é baseado na ciência da nutrição, respeitando as necessidades específicas de cada paciente, desde filhotes até cães idosos ou com condições clínicas que exigem cuidados especiais.
+
+                    Acredito que uma alimentação equilibrada é uma das ferramentas mais importantes para a prevenção de doenças e para a manutenção da saúde dos cães em todas as fases da vida."
+                  </p>
+                  <p
+                    className={`text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto transition-all duration-500 ${
+                      showFeedback ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 pointer-events-none'
+                    }`}
+                  >
+                    "Minha experiência com a CozinhaPet tem sido muito positiva. A empresa demonstra um compromisso genuíno com a qualidade dos ingredientes, segurança alimentar e respeito às formulações nutricionais. É gratificante trabalhar com uma equipe que valoriza a nutrição veterinária e busca oferecer refeições naturais equilibradas, contribuindo para mais saúde, bem-estar e qualidade de vida para os cães."
+                  </p>
+                </div>
+                <div className="flex justify-center mb-2">
+                  <button
+                    onClick={() => setShowFeedback((prev) => !prev)}
+                    className="inline-flex items-center gap-2 bg-brand-blue text-white hover:bg-brand-blueDark px-6 py-2.5 rounded-full font-bold text-xs transition-all shadow-md hover:shadow-brand-blue/20 active:scale-95"
+                  >
+                    {showFeedback ? 'Sobre' : 'Feedback'}
+                  </button>
+                </div>
               </div>
 
               {/* Specialties */}
@@ -85,10 +109,10 @@ export const Testimonials: React.FC = () => {
             </div>
 
             <div className="text-center mt-auto">
-              <a 
-                href="https://www.instagram.com/vetcarolcattani?igsh=MXJsMXpxaDUzOHJ2aA%3D%3D" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.instagram.com/vetcarolcattani?igsh=MXJsMXpxaDUzOHJ2aA%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-brand-sage text-white hover:bg-brand-sageDark px-8 py-3.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-brand-sage/20 active:scale-95"
               >
                 <Instagram size={18} /> Acompanhar no Instagram
@@ -100,21 +124,21 @@ export const Testimonials: React.FC = () => {
           <div className="bg-gradient-to-br from-brand-cream/80 to-white rounded-3xl p-8 md:p-10 border border-neutral-200/60 shadow-xl flex flex-col justify-between hover:shadow-2xl transition-all duration-300 relative overflow-hidden group">
             {/* Visual glow on card hover */}
             <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-brand-sage/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform duration-500"></div>
-            
+
             <div>
               {/* Photo Area */}
               <div className="relative mb-8 text-center">
-                <a 
-                  href="https://www.instagram.com/daninutrivet/" 
-                  target="_blank" 
+                <a
+                  href="https://www.instagram.com/daninutrivet/"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="relative block w-44 h-44 md:w-52 md:h-52 mx-auto rounded-full overflow-hidden border-4 border-brand-sageLight hover:border-brand-sage shadow-2xl transition-all duration-300 active:scale-95 group/photo"
                   title="Ver Instagram da Dra. Daniela"
                 >
-                  <img 
-                    src="/daniela_facanali.jpg" 
-                    alt="Dra. Daniela Facanali" 
-                    className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500" 
+                  <img
+                    src="/daniela_facanali.jpg"
+                    alt="Dra. Daniela Facanali"
+                    className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-neutral-900/40 opacity-0 group-hover/photo:opacity-100 flex items-center justify-center transition-opacity duration-300">
                     <div className="text-white text-center">
@@ -133,7 +157,7 @@ export const Testimonials: React.FC = () => {
                 </div>
                 <p className="text-brand-sageDark font-semibold text-sm mb-1">Médica Veterinária & Nutricionista Parceira</p>
                 <p className="text-xs text-neutral-400 font-mono mb-6">CRMV-SP 35.845</p>
-                
+
                 <p className="text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto mb-6">
                   "Dedicada à Nutrição Clínica de cães e gatos, atua diretamente no desenvolvimento e validação técnica dos cardápios da Cozinha Pet. Assegura que cada porção forneça a biodisponibilidade exata de vitaminas, minerais e aminoácidos que promovem a saúde intestinal, brilho na pelagem e a longevidade ativa do seu melhor amigo."
                 </p>
@@ -150,10 +174,10 @@ export const Testimonials: React.FC = () => {
             </div>
 
             <div className="text-center mt-auto">
-              <a 
-                href="https://www.instagram.com/daninutrivet/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.instagram.com/daninutrivet/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-brand-sage text-white hover:bg-brand-sageDark px-8 py-3.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-brand-sage/20 active:scale-95"
               >
                 <Instagram size={18} /> Acompanhar no Instagram
