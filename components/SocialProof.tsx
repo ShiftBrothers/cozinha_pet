@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { TrendingUp, Heart, ShieldCheck, Truck } from 'lucide-react';
+import { Heart, ShieldCheck, Truck } from 'lucide-react';
 
 const AnimatedCounter: React.FC<{ target: number; suffix?: string; prefix?: string; duration?: number }> = ({
   target, suffix = '', prefix = '', duration = 2000
@@ -49,13 +49,6 @@ const AnimatedCounter: React.FC<{ target: number; suffix?: string; prefix?: stri
 export const SocialProof: React.FC = () => {
   const stats = [
     {
-      label: 'Melhora na pelagem em 30 dias',
-      value: 97,
-      suffix: '%',
-      icon: TrendingUp,
-      color: 'text-brand-sage'
-    },
-    {
       label: 'De expectativa de vida a mais',
       value: 2.7,
       suffix: ' anos',
@@ -96,7 +89,7 @@ export const SocialProof: React.FC = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {stats.map((stat, index) => (
             <div key={index} className="flex flex-col items-center text-center p-4 md:p-6 rounded-2xl hover:bg-brand-cream/50 transition-colors">
               <div className={`w-10 h-10 md:w-12 md:h-12 bg-neutral-100 rounded-xl flex items-center justify-center ${stat.color} mb-3 md:mb-4`}>

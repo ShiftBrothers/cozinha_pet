@@ -4,23 +4,19 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { SocialProof } from './components/SocialProof';
 import { NutritionalCalculator } from './components/NutritionalCalculator';
-import { PricingComparison } from './components/PricingComparison';
 import { Testimonials } from './components/Testimonials';
 import { KnowledgePills } from './components/KnowledgePills';
 import { Footer } from './components/Footer';
 import { ArrowRight } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [degustationKit, setDegustationKit] = React.useState<'kit_degust_150' | 'kit_degust_250' | null>(null);
-
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-brand-blue selection:text-white">
       <Navbar />
       <main className="flex-grow">
         <Hero />
         <SocialProof />
-        <NutritionalCalculator degustationKit={degustationKit} clearDegustationKit={() => setDegustationKit(null)} />
-        <PricingComparison onSelectKit={(kit) => setDegustationKit(kit)} />
+        <NutritionalCalculator />
         <Testimonials />
         <KnowledgePills />
         
