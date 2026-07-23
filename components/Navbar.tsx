@@ -11,7 +11,7 @@ export const Navbar: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
-      const sections = ['hero', 'calculadora', 'planos', 'parceiros', 'conhecimento'];
+      const sections = ['hero', 'calculadora', 'planos', 'kit-degustacao', 'parceiros', 'conhecimento'];
       for (const id of sections.reverse()) {
         const el = document.getElementById(id);
         if (el && window.scrollY >= el.offsetTop - 200) {
@@ -36,6 +36,7 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { label: 'Planos', href: '#planos', id: 'planos' },
+    { label: 'Kit Degustação', href: '#kit-degustacao', id: 'kit-degustacao' },
     { label: 'Parceiros', href: '#parceiros', id: 'parceiros' },
     { label: 'Blog', href: '#conhecimento', id: 'conhecimento' },
   ];

@@ -33,14 +33,19 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-300 mb-4">Navegação</h4>
             <ul className="space-y-2">
-              {['Calculadora', 'Planos', 'Depoimentos', 'Blog'].map((item) => (
-                <li key={item}>
+              {[
+                { label: 'Planos', href: '#planos' },
+                { label: 'Kit Degustação', href: '#kit-degustacao' },
+                { label: 'Parceiros', href: '#parceiros' },
+                { label: 'Blog', href: '#conhecimento' },
+              ].map((item) => (
+                <li key={item.label}>
                   <a
-                    href={`#${item.toLowerCase()}`}
+                    href={item.href}
                     className="text-neutral-400 hover:text-white text-sm flex items-center gap-1 group transition-colors"
                   >
                     <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                    {item}
+                    {item.label}
                   </a>
                 </li>
               ))}
@@ -57,7 +62,7 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex items-start gap-2 text-neutral-400 text-sm">
                 <Mail size={15} className="mt-0.5 shrink-0 text-brand-blue" />
-                <span>contato@cozinhapet.com</span>
+                <span>cozinhapetcwb@gmail.com</span>
               </li>
               <li className="flex items-start gap-2 text-neutral-400 text-sm">
                 <MapPin size={15} className="mt-0.5 shrink-0 text-brand-blue" />

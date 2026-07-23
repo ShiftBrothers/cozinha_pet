@@ -272,13 +272,13 @@ function calculateNutrition(p: PetProfile) {
   const pct = getBodyPercent(p.age, p.activityLevel, p.weight, p.isNeutered);
   const dailyG = Math.round(pct * p.weight * 10);
   const monthKg = Math.round((dailyG * 30) / 1000 * 10) / 10;
-  
+
   const rer = 70 * Math.pow(p.weight, 0.75);
   let actMul = p.activityLevel === 'sedentary' ? 1.4 : p.activityLevel === 'moderate' ? 1.6 : p.activityLevel === 'active' ? 1.8 : 2.5;
   let ageMul = p.age.includes('Filhote') ? 2.5 : p.age.includes('Senior') ? 0.85 : 1;
   let neutMul = p.isNeutered ? 0.9 : 1;
   const dailyCal = Math.round(rer * actMul * ageMul * neutMul);
-  
+
   const priceRac = Math.round(p.weight * 15 + 120);
   const vetSave = Math.round(220 + (p.weight * 6));
 
@@ -287,7 +287,7 @@ function calculateNutrition(p: PetProfile) {
   else if (p.age.includes('Senior')) { prios.push('Glucosamina para articulações', 'Antioxidantes para imunidade', 'Fibras digestivas'); }
   else { prios.push('Proteína de alta biodisponibilidade', 'Ômega 3 e 6 para pelagem', 'Fibras prebióticas'); }
   if (p.allergies.trim().length > 0) prios.push(`Fórmula sem ${p.allergies.trim()}`);
-  
+
   return { dailyCal, dailyG, monthKg, priceRac, vetSave, prios, pct };
 }
 
@@ -395,24 +395,24 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
     const allPlans = [...ADULT_PLANS, ...SENIOR_PLANS];
     const selectedPlanData = allPlans.find(p => p.id === profile.selectedPlan);
     const result = calculateNutrition(profile);
-    
+
     // Retrieve selected kit name and prices
     const kits = getKitsForStage(profile.age);
     const currentKit = kits.find(k => k.id === selectedKitId) || kits[0];
-    
+
     const isDegust = chosenOption.startsWith('kit_degust_');
-    const finalKitName = chosenOption === 'kit_degust_150' 
-      ? 'Kit Degustação 150g' 
-      : chosenOption === 'kit_degust_250' 
-      ? 'Kit Degustação 250g' 
-      : (currentKit ? currentKit.name : 'Cardápio Personalizado');
+    const finalKitName = chosenOption === 'kit_degust_150'
+      ? 'Kit Degustação 150g'
+      : chosenOption === 'kit_degust_250'
+        ? 'Kit Degustação 250g'
+        : (currentKit ? currentKit.name : 'Cardápio Personalizado');
 
     const kitPrices = currentKit ? currentKit.priceFormula(result.dailyG) : null;
-    const finalPrice = chosenOption === 'kit_degust_150' 
-      ? 40 
-      : chosenOption === 'kit_degust_250' 
-      ? 60 
-      : (kitPrices ? kitPrices.discounted : 0);
+    const finalPrice = chosenOption === 'kit_degust_150'
+      ? 40
+      : chosenOption === 'kit_degust_250'
+        ? 60
+        : (kitPrices ? kitPrices.discounted : 0);
 
     const payload = {
       nome_pet: isDegust ? 'Degustação' : (profile.name || 'Sem nome'),
@@ -591,8 +591,8 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                 {sendingState === 'success' ? (
                   <div className="flex flex-col items-center justify-center py-10 text-center animate-fade-in">
                     <svg className="checkmark-wrap" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                      <circle className="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-                      <path className="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                      <circle className="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+                      <path className="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
                     </svg>
                     <h4 className="text-2xl font-serif text-neutral-900 mt-4 mb-2 font-bold">Enviado com sucesso!</h4>
                     <p className="text-sm text-neutral-700 leading-relaxed max-w-md">
@@ -628,29 +628,29 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                     <div className="space-y-5 mb-8">
                       <div>
                         <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Seu Nome</label>
-                        <input 
-                          type="text" 
-                          value={tutorName} 
-                          onChange={(e) => setTutorName(e.target.value)} 
-                          placeholder="Ex: Lucas Silva" 
+                        <input
+                          type="text"
+                          value={tutorName}
+                          onChange={(e) => setTutorName(e.target.value)}
+                          placeholder="Ex: Lucas Silva"
                           className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 text-base font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all"
                         />
                       </div>
-                      
+
                       <div>
                         <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Seu WhatsApp</label>
-                        <input 
-                          type="tel" 
-                          value={tutorPhone} 
-                          onChange={handlePhoneChange} 
-                          placeholder="Ex: (11) 99999-9999" 
+                        <input
+                          type="tel"
+                          value={tutorPhone}
+                          onChange={handlePhoneChange}
+                          placeholder="Ex: (11) 99999-9999"
                           className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 text-base font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all"
                         />
                       </div>
                     </div>
 
                     <div className="flex flex-col gap-3">
-                      <button 
+                      <button
                         onClick={handleCtaSubmit}
                         disabled={sendingState === 'sending' || tutorName.trim().length < 2 || tutorPhone.replace(/[^\d]/g, '').length < 10}
                         className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
@@ -658,11 +658,11 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                         {sendingState === 'sending' ? 'Enviando...' : 'Finalizar e Enviar'}
                         {sendingState !== 'sending' && <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />}
                       </button>
-                      
-                      <button 
-                        onClick={() => { 
-                          setShowLeadForm(false); 
-                          setSendingState('idle'); 
+
+                      <button
+                        onClick={() => {
+                          setShowLeadForm(false);
+                          setSendingState('idle');
                           if (chosenOption?.startsWith('kit_degust_')) {
                             setStep(1);
                             setChosenOption(null);
@@ -723,7 +723,7 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                       <div className="bg-white rounded-2xl p-4 text-center border border-neutral-100 shadow-sm"><div className="text-2xl md:text-3xl font-serif text-brand-blue">{result.dailyG}g</div><div className="text-[10px] md:text-xs text-neutral-500 mt-1">porção/dia</div></div>
                       <div className="bg-white rounded-2xl p-4 text-center border border-neutral-100 shadow-sm"><div className="text-2xl md:text-3xl font-serif text-brand-blue">{result.monthKg}kg</div><div className="text-[10px] md:text-xs text-neutral-500 mt-1">por mês</div></div>
                     </div>
-                    
+
                     <div className="bg-white rounded-2xl p-5 border border-neutral-100 mb-6">
                       <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-4 flex items-center gap-2"><Zap size={14} className="text-brand-sage" /> Nutrientes Prioritários</h4>
                       <div className="space-y-3">{result.prios.map((p, i) => <div key={i} className="flex items-start gap-3"><CheckCircle2 size={16} className="text-brand-sage flex-shrink-0 mt-0.5" /><span className="text-sm text-neutral-700">{p}</span></div>)}</div>
@@ -747,14 +747,13 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                           const prices = kit.priceFormula(result.dailyG);
                           const isSelected = selectedKitId === kit.id;
                           return (
-                            <div 
-                              key={kit.id} 
+                            <div
+                              key={kit.id}
                               onClick={() => setSelectedKitId(kit.id)}
-                              className={`cursor-pointer rounded-2xl p-4 border transition-all flex justify-between items-center ${
-                                isSelected 
-                                  ? 'border-brand-blue bg-brand-blueLight/30 shadow-md ring-1 ring-brand-blue/30' 
+                              className={`cursor-pointer rounded-2xl p-4 border transition-all flex justify-between items-center ${isSelected
+                                  ? 'border-brand-blue bg-brand-blueLight/30 shadow-md ring-1 ring-brand-blue/30'
                                   : 'border-neutral-200 bg-white hover:border-brand-blue/30'
-                              }`}
+                                }`}
                             >
                               <div className="pr-2 text-left">
                                 <span className="font-bold text-sm text-neutral-850 block">{kit.name}</span>
@@ -763,7 +762,7 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                               <div className="text-right flex-shrink-0">
                                 <span className="text-xs text-neutral-400 line-through block">R$ {prices.original}</span>
                                 <span className="text-sm md:text-base font-serif font-bold text-brand-blue block">
-                                  R$ {prices.discounted} 
+                                  R$ {prices.discounted}
                                   <span className="ml-1 text-[9px] font-sans font-medium text-brand-sage uppercase bg-brand-sageLight px-1 py-0.5 rounded">10% OFF</span>
                                 </span>
                               </div>
@@ -775,32 +774,31 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
 
                     {/* CTA Buttons */}
                     {isFilhote ? (
-                      <button 
+                      <button
                         onClick={() => { setChosenOption('cardapio_personalizado'); setShowLeadForm(true); }}
-                        className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98]" 
+                        className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98]"
                         id="custom-plan-cta"
                       >
                         <Sparkles size={20} /> Solicitar Cardápio Personalizado <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                       </button>
                     ) : (
                       <div className="flex flex-col gap-3">
-                        <button 
+                        <button
                           onClick={() => { setChosenOption('cardapio_personalizado'); setShowLeadForm(true); }}
-                          className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-2xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98] ring-2 ring-emerald-400/30 ring-offset-2" 
+                          className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-2xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98] ring-2 ring-emerald-400/30 ring-offset-2"
                           id="custom-plan-cta"
                         >
                           <Sparkles size={20} /> Cardápio Personalizado <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                         </button>
-                        <button 
+                        <button
                           onClick={() => { setChosenOption('pronta_entrega'); setShowLeadForm(true); }}
-                          className="w-full bg-brand-red text-white py-4 rounded-2xl font-bold text-sm md:text-base hover:bg-brand-redDark transition-all shadow-lg hover:shadow-brand-red/20 flex items-center justify-center gap-3 group active:scale-[0.98]" 
+                          className="w-full bg-brand-red text-white py-4 rounded-2xl font-bold text-sm md:text-base hover:bg-brand-redDark transition-all shadow-lg hover:shadow-brand-red/20 flex items-center justify-center gap-3 group active:scale-[0.98]"
                           id="activate-plan-cta"
                         >
                           <Heart size={18} fill="white" /> Pedido a Pronta Entrega <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                         </button>
                       </div>
                     )}
-                    <p className="text-center text-xs text-neutral-400 mt-3">Garantia de 30 dias • Cancele quando quiser • Frete grátis no 1º pedido</p>
                   </>
                 )}
               </div>

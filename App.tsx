@@ -1,22 +1,39 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { SocialProof } from './components/SocialProof';
 import { NutritionalCalculator } from './components/NutritionalCalculator';
+import { PricingComparison } from './components/PricingComparison';
 import { Testimonials } from './components/Testimonials';
 import { KnowledgePills } from './components/KnowledgePills';
 import { Footer } from './components/Footer';
+import { FloatingButtons } from './components/FloatingButtons';
 import { ArrowRight } from 'lucide-react';
 
 const App: React.FC = () => {
+  const [degustationKit, setDegustationKit] = useState<'kit_degust_150' | 'kit_degust_250' | null>(null);
+
+  const handleSelectKit = (kit: 'kit_degust_150' | 'kit_degust_250') => {
+    setDegustationKit(kit);
+    // Scroll to calculator section
+    const el = document.getElementById('calculadora');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-brand-blue selection:text-white">
       <Navbar />
       <main className="flex-grow">
         <Hero />
         <SocialProof />
-        <NutritionalCalculator />
+        <NutritionalCalculator
+          degustationKit={degustationKit}
+          clearDegustationKit={() => setDegustationKit(null)}
+        />
+        <PricingComparison onSelectKit={handleSelectKit} />
         <Testimonials />
         <KnowledgePills />
         
@@ -47,6 +64,7 @@ const App: React.FC = () => {
         </section>
       </main>
       <Footer />
+      <FloatingButtons />
     </div>
   );
 };
