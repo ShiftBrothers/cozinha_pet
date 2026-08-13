@@ -775,7 +775,7 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                     {/* CTA Buttons */}
                     {isFilhote ? (
                       <button
-                        onClick={() => { setChosenOption('cardapio_personalizado'); setShowLeadForm(true); }}
+                        onClick={() => { setChosenOption('cardapio_personalizado'); setShowLeadForm(true); document.getElementById('calculadora')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                         className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98]"
                         id="custom-plan-cta"
                       >
@@ -784,14 +784,14 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                     ) : (
                       <div className="flex flex-col gap-3">
                         <button
-                          onClick={() => { setChosenOption('cardapio_personalizado'); setShowLeadForm(true); }}
+                          onClick={() => { setChosenOption('cardapio_personalizado'); setShowLeadForm(true); document.getElementById('calculadora')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                           className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-emerald-700 transition-all shadow-2xl hover:shadow-emerald-600/30 flex items-center justify-center gap-3 group active:scale-[0.98] ring-2 ring-emerald-400/30 ring-offset-2"
                           id="custom-plan-cta"
                         >
                           <Sparkles size={20} /> Cardápio Personalizado <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                         </button>
                         <button
-                          onClick={() => { setChosenOption('pronta_entrega'); setShowLeadForm(true); }}
+                          onClick={() => { setChosenOption('pronta_entrega'); setShowLeadForm(true); document.getElementById('calculadora')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                           className="w-full bg-brand-red text-white py-4 rounded-2xl font-bold text-sm md:text-base hover:bg-brand-redDark transition-all shadow-lg hover:shadow-brand-red/20 flex items-center justify-center gap-3 group active:scale-[0.98]"
                           id="activate-plan-cta"
                         >
