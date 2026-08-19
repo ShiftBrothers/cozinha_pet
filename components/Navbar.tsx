@@ -35,7 +35,6 @@ export const Navbar: React.FC = () => {
   }, [mobileMenuOpen]);
 
   const navLinks = [
-    { label: 'Planos', href: '#planos', id: 'planos' },
     { label: 'Kit Degustação', href: '#kit-degustacao', id: 'kit-degustacao' },
     { label: 'Parceiros', href: '#parceiros', id: 'parceiros' },
     { label: 'Blog', href: '#conhecimento', id: 'conhecimento' },
