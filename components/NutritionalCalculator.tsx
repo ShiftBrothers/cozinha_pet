@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { ArrowRight, ArrowLeft, Sparkles, Calculator, CheckCircle2, Zap, Shield, Heart, ChevronDown, UtensilsCrossed } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Sparkles, Calculator, CheckCircle2, Zap, Heart, ChevronDown, UtensilsCrossed, X, Users } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 type Species = 'dog';
 type Step = 1 | 2 | 3 | 4;
@@ -13,7 +14,7 @@ interface PetProfile {
   size: string;
   activityLevel: string;
   isNeutered: boolean;
-  allergies: string;
+  allergies: string[];
   selectedPlan: string;
 }
 
@@ -27,6 +28,7 @@ interface MealPlan {
   allergenKeywords: string[];
 }
 
+// ─── Ingredientes completos extraídos da planilha (Página 2) ───────────────
 const ADULT_PLANS: MealPlan[] = [
   {
     id: 'frangolino',
@@ -35,7 +37,11 @@ const ADULT_PLANS: MealPlan[] = [
     proteinLabel: '🐔 Frango',
     emoji: '🐔',
     ingredients: 'Peito de Frango, Fígado de Frango, Arroz integral, Abobrinha, Cenoura, Gengibre, Salsinha, Farelo de Aveia, Sal Rosa do Himalaia, Óleo de Canola e Food Dog Basic.',
-    allergenKeywords: ['frango', 'ave', 'aves', 'galinha'],
+    allergenKeywords: [
+      'frango', 'ave', 'aves', 'galinha', 'peito de frango', 'fígado de frango',
+      'arroz', 'arroz integral', 'abobrinha', 'cenoura', 'gengibre', 'salsinha',
+      'farelo de aveia', 'aveia', 'sal rosa', 'óleo de canola', 'canola',
+    ],
   },
   {
     id: 'nemo',
@@ -43,17 +49,26 @@ const ADULT_PLANS: MealPlan[] = [
     protein: 'peixe',
     proteinLabel: '🐟 Peixe',
     emoji: '🐟',
-    ingredients: 'Tilápia, Arroz branco, Batata doce, Couve Flor, Chuchu, Alecrim, Salsinha, Sal Rosa do Himalaia, Óleo de Canola, Óleo de Girassol e Food Dog Basic.',
-    allergenKeywords: ['peixe', 'tilapia', 'tilápia', 'pescado', 'frutos do mar'],
+    ingredients: 'Tilápia, Arroz branco, Batata doce, Couve-Flor, Chuchu, Alecrim, Salsinha, Sal Rosa do Himalaia, Óleo de Canola, Óleo de Girassol e Food Dog Basic.',
+    allergenKeywords: [
+      'peixe', 'tilapia', 'tilápia', 'pescado', 'frutos do mar',
+      'arroz', 'arroz branco', 'batata doce', 'batata', 'couve flor', 'couve-flor', 'couve',
+      'chuchu', 'alecrim', 'salsinha', 'sal rosa', 'óleo de canola', 'canola', 'óleo de girassol', 'girassol',
+    ],
   },
   {
     id: 'musculo',
-    name: 'Sr. Músculo',
+    name: 'Mr. Músculo',
     protein: 'boi',
     proteinLabel: '🐂 Boi',
     emoji: '💪',
-    ingredients: 'Músculo Bovino, Moela, Arroz integral, Inhame, Beterraba, Abóbora Moranga, Sal Rosa do Himalaia, Alecrim, Cúrcuma, Óleo de Canola, Óleo de Girassol e Food Dog Basic.',
-    allergenKeywords: ['boi', 'bovino', 'bovinos', 'carne bovina', 'carne vermelha', 'vaca'],
+    ingredients: 'Músculo Bovino, Moela de Frango, Arroz integral, Inhame, Beterraba, Abóbora Moranga, Sal Rosa do Himalaia, Alecrim, Cúrcuma, Óleo de Canola, Óleo de Girassol e Food Dog Basic.',
+    allergenKeywords: [
+      'boi', 'bovino', 'bovinos', 'carne bovina', 'carne vermelha', 'vaca', 'músculo bovino',
+      'moela', 'moela de frango', 'frango',
+      'arroz', 'arroz integral', 'inhame', 'beterraba', 'abóbora', 'moranga',
+      'alecrim', 'cúrcuma', 'curcuma', 'sal rosa', 'óleo de canola', 'canola', 'óleo de girassol', 'girassol',
+    ],
   },
   {
     id: 'baby',
@@ -62,7 +77,11 @@ const ADULT_PLANS: MealPlan[] = [
     proteinLabel: '🐷 Porco',
     emoji: '🐷',
     ingredients: 'Lombo Suíno, Arroz branco, Batata doce, Chuchu, Brócolis, Tomilho, Manjericão, Sal Rosa do Himalaia, Óleo de Canola, Óleo de Girassol e Food Dog Basic.',
-    allergenKeywords: ['porco', 'suino', 'suíno', 'carne suína', 'carne suina'],
+    allergenKeywords: [
+      'porco', 'suino', 'suíno', 'carne suína', 'carne suina', 'lombo suíno', 'lombo',
+      'arroz', 'arroz branco', 'batata doce', 'batata', 'chuchu', 'brócolis', 'brocolis',
+      'tomilho', 'manjericão', 'manjericao', 'sal rosa', 'óleo de canola', 'canola', 'óleo de girassol', 'girassol',
+    ],
   },
 ];
 
@@ -74,7 +93,13 @@ const SENIOR_PLANS: MealPlan[] = [
     proteinLabel: '🐂 Boi',
     emoji: '💪',
     ingredients: 'Músculo bovino, Coração bovino, Lentilha, Batata doce, Beterraba, Couve-flor, Couve manteiga, Óleo de girassol, Óleo de linhaça, Sal rosa do Himalaia, Farelo de aveia, Gengibre, Alecrim desidratado, Food Dog Sênior.',
-    allergenKeywords: ['boi', 'bovino', 'bovinos', 'carne bovina', 'carne vermelha', 'vaca'],
+    allergenKeywords: [
+      'boi', 'bovino', 'bovinos', 'carne bovina', 'carne vermelha', 'vaca', 'músculo bovino',
+      'coração bovino', 'coracao bovino',
+      'lentilha', 'batata doce', 'batata', 'beterraba', 'couve flor', 'couve-flor', 'couve', 'couve manteiga',
+      'óleo de girassol', 'girassol', 'óleo de linhaça', 'linhaça', 'linhaca',
+      'sal rosa', 'farelo de aveia', 'aveia', 'gengibre', 'alecrim',
+    ],
   },
   {
     id: 'sr-frangolino',
@@ -83,17 +108,57 @@ const SENIOR_PLANS: MealPlan[] = [
     proteinLabel: '🐔 Frango',
     emoji: '🐔',
     ingredients: 'Peito de Frango, Fígado de Frango, Quinoa, Inhame, Cenoura, Abobrinha, Brócolis, Salsinha, Cúrcuma, Farelo de Aveia, Sal Rosa do Himalaia, Óleo de Linhaça, Óleo de Girassol e Food Dog Sênior.',
-    allergenKeywords: ['frango', 'ave', 'aves', 'galinha'],
+    allergenKeywords: [
+      'frango', 'ave', 'aves', 'galinha', 'peito de frango', 'fígado de frango',
+      'quinoa', 'inhame', 'cenoura', 'abobrinha', 'brócolis', 'brocolis',
+      'salsinha', 'cúrcuma', 'curcuma', 'farelo de aveia', 'aveia',
+      'sal rosa', 'óleo de linhaça', 'linhaça', 'linhaca', 'óleo de girassol', 'girassol',
+    ],
   },
 ];
 
-function getAvailablePlans(allergies: string, planList: MealPlan[]): MealPlan[] {
-  const lower = allergies.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  if (!lower.trim()) return planList;
+// Ingredientes comuns a todos os planos (não vale a pena filtrar por eles, pois bloqueiam tudo)
+const COMMON_INGREDIENTS_FOR_ALL = [
+  'sal', 'sal rosa', 'sal refinado', 'food dog', 'óleo',
+];
+
+// Lista de sugestões de alergias para o seletor de chips
+const ALLERGY_SUGGESTIONS = [
+  { label: 'Frango', value: 'frango' },
+  { label: 'Bovino / Boi', value: 'bovino' },
+  { label: 'Porco / Suíno', value: 'suíno' },
+  { label: 'Peixe / Tilápia', value: 'peixe' },
+  { label: 'Arroz', value: 'arroz' },
+  { label: 'Batata doce', value: 'batata doce' },
+  { label: 'Aveia', value: 'aveia' },
+  { label: 'Brócolis', value: 'brócolis' },
+  { label: 'Cenoura', value: 'cenoura' },
+  { label: 'Beterraba', value: 'beterraba' },
+  { label: 'Chuchu', value: 'chuchu' },
+  { label: 'Inhame', value: 'inhame' },
+  { label: 'Couve-flor', value: 'couve flor' },
+  { label: 'Abobrinha', value: 'abobrinha' },
+  { label: 'Gengibre', value: 'gengibre' },
+  { label: 'Cúrcuma', value: 'cúrcuma' },
+  { label: 'Alecrim', value: 'alecrim' },
+  { label: 'Lentilha', value: 'lentilha' },
+  { label: 'Girassol', value: 'girassol' },
+  { label: 'Linhaça', value: 'linhaça' },
+  { label: 'Canola', value: 'canola' },
+  { label: 'Quinoa', value: 'quinoa' },
+];
+
+function normalizeStr(s: string) {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function getAvailablePlans(selectedAllergies: string[], planList: MealPlan[]): MealPlan[] {
+  if (!selectedAllergies.length) return planList;
+  const normalizedAllergies = selectedAllergies.map(normalizeStr);
   return planList.filter(plan => {
     return !plan.allergenKeywords.some(kw => {
-      const kwNorm = kw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      return lower.includes(kwNorm);
+      const kwNorm = normalizeStr(kw);
+      return normalizedAllergies.some(a => kwNorm.includes(a) || a.includes(kwNorm));
     });
   });
 }
@@ -286,12 +351,12 @@ function calculateNutrition(p: PetProfile) {
   if (p.age.includes('Filhote')) { prios.push('DHA para desenvolvimento cerebral', 'Cálcio/Fósforo para ossos', 'Proteína elevada'); }
   else if (p.age.includes('Senior')) { prios.push('Glucosamina para articulações', 'Antioxidantes para imunidade', 'Fibras digestivas'); }
   else { prios.push('Proteína de alta biodisponibilidade', 'Ômega 3 e 6 para pelagem', 'Fibras prebióticas'); }
-  if (p.allergies.trim().length > 0) prios.push(`Fórmula sem ${p.allergies.trim()}`);
+  if (p.allergies.length > 0) prios.push(`Fórmula sem: ${p.allergies.join(', ')}`);
 
   return { dailyCal, dailyG, monthKg, priceRac, vetSave, prios, pct };
 }
 
-const initialProfile: PetProfile = { name: '', species: 'dog', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: '', selectedPlan: '' };
+const initialProfile: PetProfile = { name: '', species: 'dog', weight: 10, age: '', size: '', activityLevel: '', isNeutered: false, allergies: [], selectedPlan: '' };
 
 interface NutritionalCalculatorProps {
   degustationKit?: 'kit_degust_150' | 'kit_degust_250' | null;
@@ -346,6 +411,14 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
   const hasPlans = isAdult || isSenior;
   const currentPlanList = isSenior ? SENIOR_PLANS : ADULT_PLANS;
   const availablePlans = useMemo(() => getAvailablePlans(profile.allergies, currentPlanList), [profile.allergies, currentPlanList]);
+
+  const toggleAllergy = (value: string) => {
+    setProfile(prev => {
+      const already = prev.allergies.includes(value);
+      const next = already ? prev.allergies.filter(a => a !== value) : [...prev.allergies, value];
+      return { ...prev, allergies: next, selectedPlan: '' };
+    });
+  };
 
   // Auto-select plan when only one is available
   useEffect(() => {
@@ -420,7 +493,8 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
       porte: isDegust ? 'N/A' : (profile.size || getSizeFromWeight(profile.weight)),
       faixa_etaria: isDegust ? 'N/A' : (profile.age || 'N/A'),
       nivel_atividade: isDegust ? 'N/A' : (profile.activityLevel || 'N/A'),
-      alergias: isDegust ? 'N/A' : (profile.allergies || 'N/A'),
+      alergias: isDegust ? 'N/A' : (profile.allergies.length > 0 ? profile.allergies.join(', ') : 'Nenhuma'),
+      allergies_list: isDegust ? [] : profile.allergies,
       proteina: isDegust ? 'N/A' : (selectedPlanData ? selectedPlanData.protein : ''),
       castrado: isDegust ? false : profile.isNeutered,
       opcao: chosenOption,
@@ -533,9 +607,70 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                     {ACTIVITY_OPTIONS.map(o => <button key={o.value} onClick={() => setProfile({ ...profile, activityLevel: o.value })} className={`px-4 py-4 rounded-xl border text-left transition-all ${profile.activityLevel === o.value ? 'border-brand-blue bg-brand-blueLight/50 shadow-md' : 'border-neutral-200 bg-white hover:border-brand-blue/30'}`}><span className={`font-bold text-sm block ${profile.activityLevel === o.value ? 'text-brand-blue' : 'text-neutral-700'}`}>{o.label}</span><span className="text-xs text-neutral-500">{o.desc}</span></button>)}
                   </div>
                 </div>
+                {/* Allergy chip selector */}
                 <div className="mb-6">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Alergias ou Restrições</label>
-                  <input type="text" value={profile.allergies} onChange={(e) => setProfile({ ...profile, allergies: e.target.value, selectedPlan: '' })} placeholder="Ex: Frango, Glúten, Laticínios... (deixe vazio se não houver)" className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all placeholder:text-neutral-300" id="allergies-input" />
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">
+                    Alergias ou Restrições
+                    <span className="ml-2 normal-case font-normal text-neutral-400">(selecione os ingredientes que seu pet não pode consumir)</span>
+                  </label>
+
+                  {/* Selected chips */}
+                  <AnimatePresence>
+                    {profile.allergies.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="flex flex-wrap gap-2 mb-3"
+                      >
+                        {profile.allergies.map(a => (
+                          <motion.button
+                            key={a}
+                            initial={{ opacity: 0, scale: 0.7 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.7 }}
+                            onClick={() => toggleAllergy(a)}
+                            className="flex items-center gap-1.5 bg-brand-red/10 text-brand-red border border-brand-red/20 px-3 py-1.5 rounded-full text-xs font-semibold"
+                          >
+                            {ALLERGY_SUGGESTIONS.find(s => s.value === a)?.label ?? a}
+                            <X size={12} />
+                          </motion.button>
+                        ))}
+                        {profile.allergies.length > 0 && (
+                          <motion.button
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            onClick={() => setProfile(prev => ({ ...prev, allergies: [], selectedPlan: '' }))}
+                            className="text-[10px] text-neutral-400 hover:text-neutral-600 underline underline-offset-2 px-1"
+                          >
+                            limpar tudo
+                          </motion.button>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Suggestion chips */}
+                  <div className="flex flex-wrap gap-2">
+                    {ALLERGY_SUGGESTIONS.map(s => {
+                      const isSelected = profile.allergies.includes(s.value);
+                      return (
+                        <motion.button
+                          key={s.value}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.93 }}
+                          onClick={() => toggleAllergy(s.value)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
+                            isSelected
+                              ? 'bg-brand-red text-white border-brand-red'
+                              : 'bg-white text-neutral-600 border-neutral-200 hover:border-brand-red/40 hover:text-brand-red'
+                          }`}
+                        >
+                          {s.label}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Protein preference select - for adult/senior pets with multiple available plans */}
@@ -561,7 +696,11 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
 
                 {/* Auto-selected plan message */}
                 {hasPlans && availablePlans.length === 1 && (
-                  <div className="mb-6 p-4 bg-brand-sageLight/50 rounded-xl border border-brand-sage/20 animate-fade-in">
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6 p-4 bg-brand-sageLight/50 rounded-xl border border-brand-sage/20"
+                  >
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{availablePlans[0].emoji}</span>
                       <div>
@@ -569,15 +708,39 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                         <p className="text-xs text-neutral-600">Com base nas restrições, o plano ideal é o <strong>{availablePlans[0].name}</strong></p>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
 
-                {/* No plans available */}
-                {hasPlans && availablePlans.length === 0 && (
-                  <div className="mb-6 p-4 bg-brand-redLight/50 rounded-xl border border-brand-red/20 animate-fade-in">
-                    <p className="text-sm text-brand-red font-medium">Nenhum plano padrão disponível com essas restrições. Entre em contato para um plano personalizado.</p>
-                  </div>
-                )}
+                {/* No plans available — full custom message */}
+                <AnimatePresence>
+                  {hasPlans && availablePlans.length === 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: 8 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 8 }}
+                      transition={{ type: 'spring', stiffness: 280, damping: 26 }}
+                      className="mb-6 p-5 bg-amber-50 rounded-2xl border border-amber-200/80 shadow-sm"
+                    >
+                      <div className="flex items-start gap-3 mb-4">
+                        <span className="text-2xl flex-shrink-0">😔</span>
+                        <div>
+                          <p className="text-sm font-bold text-amber-800 mb-1">Nenhum cardápio disponível</p>
+                          <p className="text-xs text-amber-700 leading-relaxed">
+                            Infelizmente nenhum dos nossos cardápios prontos atende seu companheiro. Entre em contato diretamente com uma de nossas nutricionistas parceiras para montar um cardápio exclusivo.
+                          </p>
+                        </div>
+                      </div>
+                      <motion.a
+                        href="#parceiros"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.96 }}
+                        className="flex items-center justify-center gap-2 w-full bg-brand-sage text-white py-3 rounded-xl font-bold text-sm transition-colors hover:bg-brand-sageDark shadow-md"
+                      >
+                        <Users size={16} /> Ver Nutricionistas Parceiras
+                      </motion.a>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-neutral-200">
                   <input type="checkbox" id="neutered-check" checked={profile.isNeutered} onChange={(e) => setProfile({ ...profile, isNeutered: e.target.checked })} className="w-5 h-5 rounded" />
