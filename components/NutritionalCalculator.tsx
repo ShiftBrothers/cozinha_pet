@@ -1,7 +1,5 @@
-
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ArrowRight, ArrowLeft, Sparkles, Calculator, CheckCircle2, Zap, Heart, ChevronDown, UtensilsCrossed, X, Users } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
 
 type Species = 'dog';
 type Step = 1 | 2 | 3 | 4;
@@ -615,59 +613,48 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                   </label>
 
                   {/* Selected chips */}
-                  <AnimatePresence>
-                    {profile.allergies.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="flex flex-wrap gap-2 mb-3"
-                      >
-                        {profile.allergies.map(a => (
-                          <motion.button
-                            key={a}
-                            initial={{ opacity: 0, scale: 0.7 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.7 }}
-                            onClick={() => toggleAllergy(a)}
-                            className="flex items-center gap-1.5 bg-brand-red/10 text-brand-red border border-brand-red/20 px-3 py-1.5 rounded-full text-xs font-semibold"
-                          >
-                            {ALLERGY_SUGGESTIONS.find(s => s.value === a)?.label ?? a}
-                            <X size={12} />
-                          </motion.button>
-                        ))}
-                        {profile.allergies.length > 0 && (
-                          <motion.button
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            onClick={() => setProfile(prev => ({ ...prev, allergies: [], selectedPlan: '' }))}
-                            className="text-[10px] text-neutral-400 hover:text-neutral-600 underline underline-offset-2 px-1"
-                          >
-                            limpar tudo
-                          </motion.button>
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {profile.allergies.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-3 animate-fade-in">
+                      {profile.allergies.map(a => (
+                        <button
+                          key={a}
+                          type="button"
+                          onClick={() => toggleAllergy(a)}
+                          className="flex items-center gap-1.5 bg-brand-red/10 text-brand-red border border-brand-red/20 px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-brand-red/20 transition-colors"
+                        >
+                          {ALLERGY_SUGGESTIONS.find(s => s.value === a)?.label ?? a}
+                          <X size={12} />
+                        </button>
+                      ))}
+                      {profile.allergies.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => setProfile(prev => ({ ...prev, allergies: [], selectedPlan: '' }))}
+                          className="text-[10px] text-neutral-400 hover:text-neutral-600 underline underline-offset-2 px-1"
+                        >
+                          limpar tudo
+                        </button>
+                      )}
+                    </div>
+                  )}
 
                   {/* Suggestion chips */}
                   <div className="flex flex-wrap gap-2">
                     {ALLERGY_SUGGESTIONS.map(s => {
                       const isSelected = profile.allergies.includes(s.value);
                       return (
-                        <motion.button
+                        <button
                           key={s.value}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.93 }}
+                          type="button"
                           onClick={() => toggleAllergy(s.value)}
-                          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
+                          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-150 hover:scale-105 active:scale-95 ${
                             isSelected
-                              ? 'bg-brand-red text-white border-brand-red'
+                              ? 'bg-brand-red text-white border-brand-red shadow-sm'
                               : 'bg-white text-neutral-600 border-neutral-200 hover:border-brand-red/40 hover:text-brand-red'
                           }`}
                         >
                           {s.label}
-                        </motion.button>
+                        </button>
                       );
                     })}
                   </div>
@@ -696,11 +683,7 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
 
                 {/* Auto-selected plan message */}
                 {hasPlans && availablePlans.length === 1 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-6 p-4 bg-brand-sageLight/50 rounded-xl border border-brand-sage/20"
-                  >
+                  <div className="mb-6 p-4 bg-brand-sageLight/50 rounded-xl border border-brand-sage/20 animate-fade-in">
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{availablePlans[0].emoji}</span>
                       <div>
@@ -708,39 +691,29 @@ export const NutritionalCalculator: React.FC<NutritionalCalculatorProps> = ({
                         <p className="text-xs text-neutral-600">Com base nas restrições, o plano ideal é o <strong>{availablePlans[0].name}</strong></p>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
                 {/* No plans available — full custom message */}
-                <AnimatePresence>
-                  {hasPlans && availablePlans.length === 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95, y: 8 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95, y: 8 }}
-                      transition={{ type: 'spring', stiffness: 280, damping: 26 }}
-                      className="mb-6 p-5 bg-amber-50 rounded-2xl border border-amber-200/80 shadow-sm"
-                    >
-                      <div className="flex items-start gap-3 mb-4">
-                        <span className="text-2xl flex-shrink-0">😔</span>
-                        <div>
-                          <p className="text-sm font-bold text-amber-800 mb-1">Nenhum cardápio disponível</p>
-                          <p className="text-xs text-amber-700 leading-relaxed">
-                            Infelizmente nenhum dos nossos cardápios prontos atende seu companheiro. Entre em contato diretamente com uma de nossas nutricionistas parceiras para montar um cardápio exclusivo.
-                          </p>
-                        </div>
+                {hasPlans && availablePlans.length === 0 && (
+                  <div className="mb-6 p-5 bg-amber-50 rounded-2xl border border-amber-200/80 shadow-sm animate-fade-in">
+                    <div className="flex items-start gap-3 mb-4">
+                      <span className="text-2xl flex-shrink-0">😔</span>
+                      <div>
+                        <p className="text-sm font-bold text-amber-800 mb-1">Nenhum cardápio disponível</p>
+                        <p className="text-xs text-amber-700 leading-relaxed">
+                          Infelizmente nenhum dos nossos cardápios prontos atende seu companheiro. Entre em contato diretamente com uma de nossas nutricionistas parceiras para montar um cardápio exclusivo.
+                        </p>
                       </div>
-                      <motion.a
-                        href="#parceiros"
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.96 }}
-                        className="flex items-center justify-center gap-2 w-full bg-brand-sage text-white py-3 rounded-xl font-bold text-sm transition-colors hover:bg-brand-sageDark shadow-md"
-                      >
-                        <Users size={16} /> Ver Nutricionistas Parceiras
-                      </motion.a>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                    </div>
+                    <a
+                      href="#parceiros"
+                      className="flex items-center justify-center gap-2 w-full bg-brand-sage text-white py-3 rounded-xl font-bold text-sm transition-all duration-150 hover:bg-brand-sageDark hover:scale-[1.02] active:scale-95 shadow-md"
+                    >
+                      <Users size={16} /> Ver Nutricionistas Parceiras
+                    </a>
+                  </div>
+                )}
 
                 <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-neutral-200">
                   <input type="checkbox" id="neutered-check" checked={profile.isNeutered} onChange={(e) => setProfile({ ...profile, isNeutered: e.target.checked })} className="w-5 h-5 rounded" />
