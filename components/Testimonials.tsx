@@ -48,7 +48,7 @@ export const Testimonials: React.FC = () => {
                   title="Ver Instagram da Dra. Carol"
                 >
                   <img
-                    src="/carol_cattani.jpg"
+                    src="/carol_cattani.webp"
                     alt="Dra. Carol Cattani"
                     className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500"
                   />
@@ -72,18 +72,16 @@ export const Testimonials: React.FC = () => {
 
                 <div className="relative overflow-hidden mb-6">
                   <p
-                    className={`text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto transition-all duration-500 ${
-                      showFeedback ? 'opacity-0 absolute inset-0 pointer-events-none' : 'opacity-100 relative'
-                    }`}
+                    className={`text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto transition-all duration-500 ${showFeedback ? 'opacity-0 absolute inset-0 pointer-events-none' : 'opacity-100 relative'
+                      }`}
                   >
                     "Dedicada à nutrição clínica de cães, atuo na elaboração de planos alimentares individualizados que promovem saúde, qualidade de vida e longevidade. Meu trabalho é baseado na ciência da nutrição, respeitando as necessidades específicas de cada paciente, desde filhotes até cães idosos ou com condições clínicas que exigem cuidados especiais.
 
                     Acredito que uma alimentação equilibrada é uma das ferramentas mais importantes para a prevenção de doenças e para a manutenção da saúde dos cães em todas as fases da vida."
                   </p>
                   <p
-                    className={`text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto transition-all duration-500 ${
-                      showFeedback ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 pointer-events-none'
-                    }`}
+                    className={`text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto transition-all duration-500 ${showFeedback ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 pointer-events-none'
+                      }`}
                   >
                     "Minha experiência com a CozinhaPet tem sido muito positiva. A empresa demonstra um compromisso genuíno com a qualidade dos ingredientes, segurança alimentar e respeito às formulações nutricionais. É gratificante trabalhar com uma equipe que valoriza a nutrição veterinária e busca oferecer refeições naturais equilibradas, contribuindo para mais saúde, bem-estar e qualidade de vida para os cães."
                   </p>
