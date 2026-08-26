@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { SocialProof } from './components/SocialProof';
@@ -22,6 +22,22 @@ const App: React.FC = () => {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
+
+  // Handle direct URL navigation with hash anchors (e.g. /#parceiros)
+  useEffect(() => {
+    const hash = window.location.hash?.slice(1); // remove the '#'
+    if (!hash) return;
+
+    // Small delay to ensure all components are mounted and have their final dimensions
+    const timer = setTimeout(() => {
+      const el = document.getElementById(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-brand-blue selection:text-white">
