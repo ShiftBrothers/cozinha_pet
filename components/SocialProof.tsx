@@ -81,7 +81,7 @@ export const SocialProof: React.FC = () => {
           <p className="text-neutral-400 font-semibold text-[10px] uppercase tracking-[0.25em] mb-6">Reconhecidos por</p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14 opacity-30 grayscale contrast-150">
             <img
-              src="/fica_comigo.png"
+              src="/fica_comigo.webp"
               alt="Instituto Fica Comigo"
               className="h-16 md:h-20 w-auto object-contain"
             />
