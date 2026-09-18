@@ -22,7 +22,7 @@ export const FloatingButtons: React.FC = () => {
         <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-20 scale-110 animate-pulse" />
 
         <a
-          href="https://wa.me/5541988752887?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Cozinha%20Pet%20e%20gostaria%20de%20saber%20mais%20sobre%20as%20op%C3%A7%C3%B5es%20de%20alimenta%C3%A7%C3%A3o%20natural%20para%20o%20meu%20pet.%20Pode%20me%20ajudar?"
+          href="https://wa.me/5541988752887?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20CozinhaPet%20e%20gostaria%20de%20saber%20mais%20sobre%20as%20op%C3%A7%C3%B5es%20de%20alimenta%C3%A7%C3%A3o%20natural%20para%20o%20meu%20pet.%20Pode%20me%20ajudar?"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Falar com a CozinhaPet no WhatsApp"
