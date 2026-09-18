@@ -114,20 +114,20 @@ export const Testimonials: React.FC = () => {
 
             <div className="text-center mt-auto flex flex-col items-center gap-3">
               <a
-                href="https://www.instagram.com/vetcarolcattani?igsh=MXJsMXpxaDUzOHJ2aA%3D%3D"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-brand-sage text-white hover:bg-brand-sageDark px-8 py-3.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-brand-sage/20 active:scale-95"
-              >
-                <Instagram size={18} /> Acompanhar no Instagram
-              </a>
-              <a
                 href="https://api.whatsapp.com/send/?phone=554199851567&text=Ol%C3%A1%20%21%20Vim%20pela%20CozinhaPet%20gostaria%20de%20montar%20um%20card%C3%A1pio%20%F0%9F%90%BE"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#25D366] text-white hover:bg-[#1ebe5d] px-8 py-3.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-[#25D366]/30 active:scale-95"
               >
                 <WhatsAppIcon /> Falar no WhatsApp
+              </a>
+              <a
+                href="https://www.instagram.com/vetcarolcattani?igsh=MXJsMXpxaDUzOHJ2aA%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-brand-sage text-white hover:bg-brand-sageDark px-8 py-3.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-brand-sage/20 active:scale-95"
+              >
+                <Instagram size={18} /> Acompanhar no Instagram
               </a>
             </div>
           </div>
