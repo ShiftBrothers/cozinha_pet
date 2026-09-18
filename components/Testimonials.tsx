@@ -171,7 +171,7 @@ export const Testimonials: React.FC = () => {
                 <p className="text-xs text-neutral-400 font-mono mb-6">CRMV-SP 35.845</p>
 
                 <p className="text-sm text-neutral-600 leading-relaxed max-w-xl mx-auto mb-6">
-                  "Dedicada à Nutrição Clínica de cães e gatos, atua diretamente no desenvolvimento e validação técnica dos cardápios da Cozinha Pet. Assegura que cada porção forneça a biodisponibilidade exata de vitaminas, minerais e aminoácidos que promovem a saúde intestinal, brilho na pelagem e a longevidade ativa do seu melhor amigo."
+                  "Dedicada à Nutrição Clínica de cães e gatos, atua diretamente no desenvolvimento e validação técnica dos cardápios da CozinhaPet. Assegura que cada porção forneça a biodisponibilidade exata de vitaminas, minerais e aminoácidos que promovem a saúde intestinal, brilho na pelagem e a longevidade ativa do seu melhor amigo."
                 </p>
               </div>
 

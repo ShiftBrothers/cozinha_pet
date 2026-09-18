@@ -25,7 +25,7 @@ export const FloatingButtons: React.FC = () => {
           href="https://wa.me/5541988752887?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Cozinha%20Pet%20e%20gostaria%20de%20saber%20mais%20sobre%20as%20op%C3%A7%C3%B5es%20de%20alimenta%C3%A7%C3%A3o%20natural%20para%20o%20meu%20pet.%20Pode%20me%20ajudar?"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Falar com a Cozinha Pet no WhatsApp"
+          aria-label="Falar com a CozinhaPet no WhatsApp"
           title="Fale pelo WhatsApp"
           className="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
           style={{ background: '#25D366' }}
@@ -49,7 +49,7 @@ export const FloatingButtons: React.FC = () => {
           href="https://www.instagram.com/cozinhapet_/"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Instagram da Cozinha Pet"
+          aria-label="Instagram da CozinhaPet"
           title="Siga no Instagram"
           className="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
           style={{ background: 'linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)' }}

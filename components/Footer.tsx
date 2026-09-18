@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
             <div className="flex gap-3 mt-6">
               <a
                 href="#"
-                aria-label="Instagram Cozinha Pet"
+                aria-label="Instagram CozinhaPet"
                 className="w-10 h-10 rounded-full bg-white/5 hover:bg-brand-blue flex items-center justify-center transition-colors"
               >
                 <Instagram size={18} />
@@ -75,7 +75,7 @@ export const Footer: React.FC = () => {
         {/* Divider */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-neutral-500 text-xs">
-            © {currentYear} Cozinha Pet. Todos os direitos reservados.
+            © {currentYear} CozinhaPet. Todos os direitos reservados.
           </p>
           <div className="flex gap-4">
             <a href="#" className="text-neutral-500 hover:text-white text-xs transition-colors">Política de Privacidade</a>
