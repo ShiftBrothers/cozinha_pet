@@ -148,7 +148,7 @@ export const Testimonials: React.FC = () => {
                   title="Ver Instagram da Dra. Daniela"
                 >
                   <img
-                    src="/daniela_facanali.jpg"
+                    src="/daniela_facanali.webp"
                     alt="Dra. Daniela Facanali"
                     className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500"
                   />
