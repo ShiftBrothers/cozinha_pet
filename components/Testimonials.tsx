@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Award, BadgeCheck, Instagram, CheckCircle2 } from 'lucide-react';
+import { Award, BadgeCheck, Instagram } from 'lucide-react';
 
 const WhatsAppIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px]">
@@ -160,8 +160,7 @@ const veterinarians: Partner[] = [
     specialties: ['Fisiatria & Reabilitação', 'Acupuntura Vet', 'Terapias Naturais'],
     image: '/carol_cattani.webp',
     instagram: 'https://www.instagram.com/vetcarolcattani?igsh=MXJsMXpxaDUzOHJ2aA%3D%3D',
-    instagram: 'https://www.instagram.com/crecheautentica/',
-    whatsapp: 'https://api.whatsapp.com/send/?phone=554199851567&text=Ol%C3%A1%20%21%20Vim%20pela%20CozinhaPet%20gostaria%20de%20montar%20um%20card%C3%A1pio%20%F0%9F%90%BE',
+    whatsapp: 'https://api.whatsapp.com/send/?phone=554199851567&text=Olá%20%21%20Vim%20pela%20CozinhaPet%20gostaria%20de%20montar%20um%20cardápio%20🐾',
     type: 'veterinarian',
   },
   {
@@ -173,14 +172,12 @@ const veterinarians: Partner[] = [
     specialties: ['Nutrição Clínica Vet', 'Formulações Científicas', 'Dieta Natural Customizada'],
     image: '/daniela_facanali.webp',
     instagram: 'https://www.instagram.com/daninutrivet/',
-    instagram: 'https://www.instagram.com/crecheautentica/',
-    whatsapp: 'https://api.whatsapp.com/send/?phone=554187784624&text=Ol%C3%A1%2C+vim+pela+CozinhaPet%21+Gostaria+de+mais+informa%C3%A7%C3%B5es+sobre+voc%C3%AAs%21+%23COZINHAPET10&type=phone_number&app_absent=0',
+    whatsapp: 'https://api.whatsapp.com/send/?phone=554187784624&text=Olá%2C+vim+pela+CozinhaPet%21+Gostaria+de+mais+informações+sobre+vocês%21+%23COZINHAPET10&type=phone_number&app_absent=0',
     type: 'veterinarian',
   },
 ];
 
 const establishments: Partner[] = [
-  // establishments section
   {
     id: 'autentica',
     name: 'Creche Autêntica',
@@ -191,7 +188,7 @@ const establishments: Partner[] = [
     address: 'R. Alm. Gonçalves, 1215 - Rebouças',
     addressLink: 'https://maps.app.goo.gl/HhbDePyAB1Grh8156?g_st=aw',
     instagram: 'https://www.instagram.com/crecheautentica/',
-    whatsapp: 'https://api.whatsapp.com/send/?phone=554187784624&text=Ol%C3%A1%2C+vim+pela+CozinhaPet%21+Gostaria+de+mais+informa%C3%A7%C3%B5es+sobre+voc%C3%AAs%21+%23COZINHAPET10&type=phone_number&app_absent=0',
+    whatsapp: 'https://api.whatsapp.com/send/?phone=554187784624&text=Olá%2C+vim+pela+CozinhaPet%21+Gostaria+de+mais+informações+sobre+vocês%21+%23COZINHAPET10&type=phone_number&app_absent=0',
     type: 'establishment',
   },
 ];
@@ -241,7 +238,8 @@ export const Testimonials: React.FC = () => {
             Veterinários e <span className="italic text-brand-red">Nutricionistas Parceiros</span>
           </h2>
           <p className="text-neutral-500 text-base md:text-lg max-w-2xl mx-auto">
-            Nossos cardápios são formulados e validados por especialistas em nutrição veterinária, garantindo o equilíbrio perfeito para a vitalidade do seu pet.
+            Nossos cardápios são formulados e validados por especialistas em nutrição veterinária, garantindo o equilíbrio
+            perfeito para a vitalidade do seu pet.
           </p>
         </div>
 
