@@ -172,7 +172,6 @@ const veterinarians: Partner[] = [
     specialties: ['Nutrição Clínica Vet', 'Formulações Científicas', 'Dieta Natural Customizada'],
     image: '/daniela_facanali.webp',
     instagram: 'https://www.instagram.com/daninutrivet/',
-    whatsapp: 'https://wa.me/552198196881?text=Olá%2C%20!%20Vim%20pela%20CozinhaPet%20gostaria%20de%20montar%20um%20cardápio%20🍽️',
     type: 'veterinarian',
   },
 ];

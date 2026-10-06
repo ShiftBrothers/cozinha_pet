@@ -80,11 +80,30 @@ export const SocialProof: React.FC = () => {
         <div className="flex flex-col items-center mb-10 md:mb-12">
           <p className="text-neutral-400 font-semibold text-[10px] uppercase tracking-[0.25em] mb-6">Reconhecidos por</p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14 opacity-30 grayscale contrast-150">
-            <img
-              src="/fica_comigo.webp"
-              alt="Instituto Fica Comigo"
-              className="h-16 md:h-20 w-auto object-contain"
-            />
+            <a
+              href="https://institutoficacomigo.org.br/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-70 transition-opacity"
+            >
+              <img
+                src="/fica_comigo.webp"
+                alt="Instituto Fica Comigo"
+                className="h-16 md:h-20 w-auto object-contain"
+              />
+            </a>
+            <a
+              href="https://dnaanimal.com.br/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-70 transition-opacity"
+            >
+              <img
+                src="/dnaanimal-icon.webp"
+                alt="DNA Animal"
+                className="h-24 md:h-32 w-auto object-contain"
+              />
+            </a>
           </div>
         </div>
 
