@@ -234,11 +234,10 @@ export const Testimonials: React.FC = () => {
             <Award size={14} /> Validação Profissional
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-neutral-900 mb-4 leading-tight">
-            Veterinários e <span className="italic text-brand-red">Nutricionistas Parceiros</span>
+            Conheça Nossos Parceiros
           </h2>
           <p className="text-neutral-500 text-base md:text-lg max-w-2xl mx-auto">
-            Nossos cardápios são formulados e validados por especialistas em nutrição veterinária, garantindo o equilíbrio
-            perfeito para a vitalidade do seu pet.
+            Conectados pelo mesmo propósito: a saúde e a felicidade do seu pet!
           </p>
         </div>
 
