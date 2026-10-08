@@ -190,6 +190,19 @@ const establishments: Partner[] = [
     whatsapp: 'https://api.whatsapp.com/send/?phone=554187784624&text=Olá%2C+vim+pela+CozinhaPet%21+Gostaria+de+mais+informações+sobre+vocês%21+%23COZINHAPET10&type=phone_number&app_absent=0',
     type: 'establishment',
   },
+  {
+    id: 'parkpet',
+    name: 'Park Pet',
+    role: 'Estabelecimento Parceiro',
+    description: '"Seu pet merece mais do que passar o dia sozinho em casa. Na nossa creche, ele encontra um ambiente seguro, diversão monitorada e muito carinho. Enquanto você trabalha tranquilo, seu melhor amigo gasta energia, faz novos amigos e recebe atenção personalizada. Garanta o dia feliz do seu pet. Entre em contato e agende uma visita!"',
+    specialties: ['Creche Premium', 'Cuidado Diário', 'Ambiente Seguro'],
+    image: '/logo_parkpet.webp',
+    address: 'Av. Anita Garibaldi, 3776 - Juvevê',
+    addressLink: 'https://maps.app.goo.gl/385i4FReAuDEKTEd6',
+    instagram: 'https://www.instagram.com/parkpetcreche/',
+    whatsapp: 'https://api.whatsapp.com/send/?phone=554196930070&text=Olá%2C+vim+pela+CozinhaPet%21+Gostaria+de+mais+informações+sobre+vocês%21+&type=phone_number&app_absent=0',
+    type: 'establishment',
+  },
 ];
 
 export const Testimonials: React.FC = () => {
