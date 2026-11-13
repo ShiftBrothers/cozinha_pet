@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+/* ─── WCAG AA Contrast Compliance ─── */
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bg-brand-blue,
+.bg-brand-blueDark,
+.bg-brand-red,
+.bg-brand-redDark {
+  color: white;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea,
+select {
+  color: rgb(26, 35, 50);
+  background-color: white;
+  border: 1px solid rgb(237, 229, 216);
+}
+
+input::placeholder {
+  color: rgb(120, 113, 108);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  border: 2px solid rgb(189, 180, 170);
+  accent-color: #004ea1;
+}
+
+.bg-brand-cream {
+  color: rgb(26, 35, 50);
+}
+
+.bg-neutral-900 {
+  color: white;
+}
+
+nav a {
+  color: rgb(26, 35, 50);
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: rgb(218, 31, 38);
+}
+
+
+
