@@ -6,7 +6,7 @@
 
 ## URL de Produção
 
-`https://www.cozinhapets.com.br/`
+`https://cozinhapets.com.br/`
 
 ---
 

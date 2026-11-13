@@ -30,33 +30,26 @@ Site SPA React com CSR puro e Tailwind via CDN. Crawlers sem JS veem `<div id="r
 - **Risco:** Baixo.
 - **Prioridade:** 🔴 P0
 
-### P03 — Falta de canonical
+### P03 — ~~Falta de canonical~~ ✅ RESOLVIDO (Missão 01A)
 - **Arquivo:** `index.html`
-- **Problema:** Sem `<link rel="canonical">`. Risco de duplicação www/non-www.
-- **Evidência:** Zero resultados na busca por "canonical".
-- **Solução:** Adicionar `<link rel="canonical" href="https://www.cozinhapets.com.br/" />`.
-- **Risco:** Nenhum.
-- **Prioridade:** 🔴 P1
+- **Correção:** `<link rel="canonical" href="https://cozinhapets.com.br/" />` adicionado (linha 22).
+- **Data:** 13/11/2026
 
-### P04 — Falta de og:image e og:url
+### P04 — ~~Falta de og:image e og:url~~ ✅ RESOLVIDO (Missão 01A)
 - **Arquivo:** `index.html`
-- **Problema:** `og:image` e `og:url` ausentes. Compartilhamentos sem imagem.
-- **Evidência:** Existem og:title, og:description, og:type mas não og:image/og:url.
-- **Solução:** Criar imagem OG (1200x630) e adicionar meta tags.
-- **Risco:** Nenhum.
-- **Prioridade:** 🟡 P1
+- **Correção:** og:url, og:image, og:site_name, og:locale adicionados. og:title e og:description atualizados.
+- **Imagem utilizada:** `/logo.png` (existente em `public/`, 39KB)
+- **Data:** 13/11/2026
 
-### P05 — Falta de Twitter Card
+### P05 — ~~Falta de Twitter Card~~ ✅ RESOLVIDO (Missão 01A)
 - **Arquivo:** `index.html`
-- **Problema:** Nenhuma meta tag twitter:card/title/description/image.
-- **Solução:** Adicionar tags.
-- **Prioridade:** 🟡 P2
+- **Correção:** twitter:card, twitter:title, twitter:description, twitter:image adicionados.
+- **Data:** 13/11/2026
 
-### P06 — Title tag genérico
+### P06 — ~~Title tag genérico~~ ✅ RESOLVIDO (Missão 01A)
 - **Arquivo:** `index.html` (linha 17)
-- **Problema:** `<title>CozinhaPet</title>` — sem keywords, localização.
-- **Solução:** Expandir: "CozinhaPet — Alimentação Natural para Cães em Curitiba | Nutrição Veterinária"
-- **Prioridade:** 🔴 P1
+- **Correção:** Title atualizado para "Alimentação Natural para Cães em Curitiba | CozinhaPet". Description atualizada sem promessas de saúde.
+- **Data:** 13/11/2026
 
 ### P07 — Telefone incorreto no JSON-LD
 - **Arquivo:** `index.html` (linha 301)
@@ -70,11 +63,10 @@ Site SPA React com CSR puro e Tailwind via CDN. Crawlers sem JS veem `<div id="r
 - **Solução:** Adicionar `geo` e `openingHoursSpecification`.
 - **Prioridade:** 🟡 P2
 
-### P09 — Sitemap estático
+### P09 — ~~Sitemap estático~~ ✅ RESOLVIDO (Missão 01A)
 - **Arquivo:** `public/sitemap.xml`
-- **Problema:** lastmod fixo em `2026-08-24`. Apenas 1 URL.
-- **Solução:** Atualizar lastmod.
-- **Prioridade:** 🟢 P3
+- **Correção:** lastmod atualizado para 2026-11-13 (data real da alteração de conteúdo).
+- **Data:** 13/11/2026
 
 ### P10 — Imagens externas Unsplash
 - **Arquivo:** `components/Hero.tsx` (linhas 134-137)
@@ -122,6 +114,12 @@ Site SPA React com CSR puro e Tailwind via CDN. Crawlers sem JS veem `<div id="r
 - **Prioridade:** 🟢 P3
 
 ---
+### P18 — ~~Domínio www vs non-www sem redirecionamento~~ ✅ RESOLVIDO (Missão 01A.1)
+- **Arquivo:** `vercel.json`, `sitemap.xml`, `robots.txt`
+- **Correção:** Adicionado redirecionamento 301 www → non-www em `vercel.json`. Sitemap e robots.txt ajustados para `https://cozinhapets.com.br/`.
+- **Data:** 13/11/2026
+
+
 
 ## Items OK ✅
 

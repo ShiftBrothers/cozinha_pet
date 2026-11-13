@@ -4,5 +4,13 @@
       "*": false,
       "main": true
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/:path(.*)",
+      "has": [{ "type": "host", "value": "www.cozinhapets.com.br" }],
+      "destination": "https://cozinhapets.com.br/:path",
+      "permanent": true
+    }
+  ]
 }
